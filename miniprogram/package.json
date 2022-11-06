@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "spa-custom-hooks": "^1.2.6",
+    "@vant/weapp": "^1.5.2"
+  }
+}

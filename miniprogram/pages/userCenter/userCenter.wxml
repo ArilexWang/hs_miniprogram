@@ -1,0 +1,39 @@
+<view class="container main-color">
+    <view class="main-content">
+      <text class="intro">您暂未授权荟晟体育小程序获取您的信息，将无法正常使用小程序的功能。如需正常使用，请按此点击如下按钮，打开手机号、头像、昵称等信息的授权。</text>
+      <view class="flex-center">
+        <text class=".phone">{{userInfo.phoneNum}}</text>
+        <button class="getPhoneBtn, main-color" open-type="getPhoneNumber"
+        bindgetphonenumber="getPhoneNumber">获取手机号</button>
+      </view>
+      <label class="checkbox">
+        <switch type="checkbox" bindchange="switchChanged" checked="{{switchChecked}}" />我已认真阅读并接受该免责说明
+      </label>
+      <button class="loginBtn, highlight-background"  bindtap="getUserProfile">授权登录</button>
+    </view>
+    <van-dialog id="van-dialog" />
+    <view class="foot">
+      <text>请您仔细阅读并了解我们的</text>
+      <text class="highlight-color" bindtap="onMsgClick">《免责说明》</text>
+      <text>当您继续使用小程序，代表您同意并接受该说明</text>
+    </view>
+    <!-- <van-overlay show="{{ showOverlay }}" bind:click="onHideMask">
+      <view class="wrapper">
+        <scroll-view scroll-y class="main-color" style="width:300px;height: 400px;">
+          <view class="flex-column flex-align-stretch flex-content-between"
+            style="min-height: 200px;margin:20px; color: white">
+            <text>一、十二周岁以下的儿童入场须有成人陪同。</text>
+            <text>二、饮用或食用含酒精的饮品、食品后，请勿参与运动。</text>
+            <text>三、服用药物后，请勿参与运动。</text>
+            <text>四、若您长时间未休息或处于熬夜状态时，请勿参与运动。</text>
+            <text>五、如您患有哮喘、高血压或其他心肺类型的疾病，请勿参与运动。</text>
+            <text>六、请穿着合适的运动装备进入球馆，避免受伤。</text>
+            <text>七、严禁扣篮。</text>
+            <text>八、请勿在球场边奔跑嬉戏。</text>
+            <text>九、请保管好您的随身物品。如有贵重物品，请主动与工作人员联系并寄存，否则本球馆不对任何物品的遗失负责。</text>
+            <text>请您认真阅读以上声明，若您存在上述情形仍参与运动，本球场不承担任何赔偿、补偿责任。</text>
+          </view>
+        </scroll-view>
+      </view>
+    </van-overlay> -->
+  </view>
