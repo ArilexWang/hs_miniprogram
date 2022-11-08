@@ -1,23 +1,23 @@
 /* miniprogram/pages/userCenter.wxss */
 
 .intro{
-  padding: 100rpx;
+  /* padding: 100rpx; */
   font-size: 30rpx;
   line-height: 50rpx;
-  color: white;
+  color: black;
 }
 .flex-center{
   display: flex;
   justify-content: start;
   align-items: center;
   border: 2rpx solid;
-  border-color: #d8313d;
+  border-color: #DCDCDC;
 }
 
 .phone{
   /* background-color: white; */
   text-align: center;
-  color: white;
+  color: black;
   letter-spacing: 2rpx;
   line-height: 80rpx;
   width: 300rpx;
@@ -26,7 +26,6 @@
 .getPhoneBtn{
   /* width: 230rpx; */
   font-size: 20px;
-  color: #d8313d;
   font-weight: normal;
   /* background-color: white; */
 }
@@ -48,7 +47,7 @@
 }
 
 .checkbox{
-  color: white;
+  color: black;
   line-height: 50rpx;
   margin-top: 15px;
   justify-content: start;
@@ -57,9 +56,9 @@
 .card{
   width: 90vw;
   border-radius: 10px;
-  background-color: #343640;
+  border: 1px solid #DCDCDC;
   margin-top: 10px;
-  color: white;
+  color: black;
 }
 
 .wrapper {

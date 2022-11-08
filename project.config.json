@@ -28,6 +28,7 @@
       "disablePlugins": [],
       "outputPath": ""
     },
+    "regeneratorRuntime": true,
     "enableEngineNative": false,
     "useIsolateContext": true,
     "userConfirmedBundleSwitch": false,
@@ -41,7 +42,7 @@
   },
   "appid": "wx12f0f6508dfdf68d",
   "projectname": "quickstart-wx-cloud",
-  "libVersion": "2.14.1",
+  "libVersion": "2.21.4",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
   "condition": {
     "search": {

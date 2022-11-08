@@ -17,6 +17,8 @@ button:focus {
   outline: 0;
 }
 
+
+
 button::after {
   border: none;
 }
@@ -162,12 +164,18 @@ page {
   word-break: break-all;
 }
 
+.seperate-line {
+  width: 95vw;
+  height: 0.5px;
+  background-color: #DCDCDC;
+}
+
 .main-color {
-  background-color: #1e1e22;
+  background-color: #ffffff;
 }
 
 .highlight-background {
-  background-color: #d8313d;
+  background-color: #1E57CF;
 }
 
 .highlight-color {
@@ -225,9 +233,9 @@ page {
 }
 
 .foot {
-  color: white;
+  color: black;
   font-size: 13px;
-  margin: 10px;
+  margin: 15px;
   flex: 0 0 auto
 }
 

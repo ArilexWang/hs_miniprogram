@@ -1,23 +1,28 @@
-<view class="container main-color">
-    <view class="main-content">
-      <text class="intro">您暂未授权荟晟体育小程序获取您的信息，将无法正常使用小程序的功能。如需正常使用，请按此点击如下按钮，打开手机号、头像、昵称等信息的授权。</text>
-      <view class="flex-center">
-        <text class=".phone">{{userInfo.phoneNum}}</text>
-        <button class="getPhoneBtn, main-color" open-type="getPhoneNumber"
-        bindgetphonenumber="getPhoneNumber">获取手机号</button>
+<view wx:if="{{!hasLogin}}" class="container main-color">
+  <view class="main-content">
+    <view class="intro flex flex-column" style="margin: 20px">
+      <view>
+        <text>您暂未授权荟晟体育小程序获取您的信息，将无法正常使用小程序的功能。如需正常使用，请按此点击如下按钮，打开手机号、头像、昵称等信息的授权。</text>
       </view>
-      <label class="checkbox">
-        <switch type="checkbox" bindchange="switchChanged" checked="{{switchChecked}}" />我已认真阅读并接受该免责说明
-      </label>
-      <button class="loginBtn, highlight-background"  bindtap="getUserProfile">授权登录</button>
+      <view style="margin-top: 10px;">
+        <text>请您仔细阅读并了解我们的</text>
+        <text class="highlight-color" bindtap="onMsgClick">《免责说明》</text>
+        <text>当您继续使用小程序，代表您同意并接受该说明</text>
+      </view>
+
     </view>
-    <van-dialog id="van-dialog" />
-    <view class="foot">
-      <text>请您仔细阅读并了解我们的</text>
-      <text class="highlight-color" bindtap="onMsgClick">《免责说明》</text>
-      <text>当您继续使用小程序，代表您同意并接受该说明</text>
+    <view class="flex-center">
+      <text class=".phone">{{userInfo.phoneNum}}</text>
+      <button class="getPhoneBtn" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">获取手机号</button>
     </view>
-    <!-- <van-overlay show="{{ showOverlay }}" bind:click="onHideMask">
+    <label class="checkbox">
+      <switch type="checkbox" bindchange="switchChanged" checked="{{switchChecked}}" />我已认真阅读并接受该免责说明
+    </label>
+    <button class="loginBtn, highlight-background" bindtap="getUserProfile">授权登录</button>
+  </view>
+  <van-dialog id="van-dialog" />
+
+  <!-- <van-overlay show="{{ showOverlay }}" bind:click="onHideMask">
       <view class="wrapper">
         <scroll-view scroll-y class="main-color" style="width:300px;height: 400px;">
           <view class="flex-column flex-align-stretch flex-content-between"
@@ -36,4 +41,60 @@
         </scroll-view>
       </view>
     </van-overlay> -->
+</view>
+<view wx:else class="container, main-color">
+  <!-- <van-overlay show="{{ showQRCode }}" bind:click="onHideMask">
+    <canvas type="2d" id="myQRCode"></canvas>
+  </van-overlay> -->
+  <view class="main-content">
+    <view class="flex-row flex-content-between flex-align-center" style="width: 95vw;">
+      <view class="flex-row flex-align-center" style="margin:10px">
+        <image style="width: 60px;height:60px;border-radius:30px;margin:5px" mode="aspectFit" src="{{userInfo.avatarUrl}}"></image>
+        <text>{{userInfo.nickName}}</text>
+      </view>
+      <image src="../../src/qrcode.png" style="width:50px;margin:10px" mode="widthFix" bindtap="qcCodeClick"></image>
+    </view>
+    <view class="seperate-line"></view>
+    <view class="flex-row flex-content-between flex-align-center" style="width: 85vw; margin: 10px;">
+      <view>散客卡次数</view>
+      <view>{{userInfo.validTimes}}</view>
+    </view>
+    <view class="flex-row flex-content-between flex-align-center" style="width: 85vw; margin: 10px;">
+      <view>余额</view>
+      <view>{{userInfo.cash}}</view>
+    </view>
+    <view class="flex-row flex-content-between flex-align-center" style="width: 85vw; margin: 10px;">
+      <view>积分</view>
+      <view>{{userInfo.integral}}</view>
+    </view>
+    <view class="seperate-line"></view>
+
+    <view class="card flex-row flex-content-between flex-align-center" bindtap="onRechargeOrderClick">
+      <view class="flex-row flex-align-center">
+        <image src="../../src/001-ball.png" style="width:40px;margin:10px" mode="widthFix"></image>
+        <view>野球订单</view>
+      </view>
+      <image src="../../src/next.png" style="width:25px;margin:10px" mode="widthFix"></image>
+    </view>
+    <view class="card flex-row flex-content-between flex-align-center" bindtap="onCourtOrderClick">
+      <view class="flex-row flex-align-center">
+        <image src="../../src/calendar.png" style="width:40px;margin:10px" mode="widthFix"></image>
+        <view>包场订单</view>
+      </view>
+      <image src="../../src/next.png" style="width:25px;margin:10px" mode="widthFix"></image>
+    </view>
+    <view class="card flex-row flex-content-between flex-align-center" bindtap="onCashOrdersClick">
+      <view class="flex-row flex-align-center">
+        <image src="../../src/yen.png" style="width:40px;margin:10px" mode="widthFix"></image>
+        <view>充值订单</view>
+      </view>
+      <image src="../../src/next.png" style="width:25px;margin:10px" mode="widthFix"></image>
+    </view>
   </view>
+  <view class="foot">
+    <view class="card flex-row flex-content-center flex-align-center" style="height: 50px" bindtap="onLogoutClick">
+      <view style="font-size: 18px">退出登录</view>
+    </view>
+  </view>
+  <van-dialog id="van-dialog" />
+</view>

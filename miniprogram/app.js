@@ -1,31 +1,34 @@
 // app.js
 import CustomHook from 'spa-custom-hooks';
+import { LastLoginKey } from './utils/const'
+
 let globalData = {
   // 是否已拿到token
-  token: '',
+  _openid: '',
   // 用户信息
   userInfo: {
-    userId: '',
-    head: '',
-    userType: 0,
+    _id:'',
+    _openid: '',
+    nickName: '',
+    avatarUrl: '',
   },
   env:'test-7ggypkpn0dd471ba'
 }
 CustomHook.install({
-  'Login': {
-    name: 'Login',
-    watchKey: 'token',
+  'GetOpenid': {
+    name: 'GetOpenid',
+    watchKey: '_openid',
     onUpdate(val) {
       //有token则触发此钩子
       return !!val;
     }
   },
-  'User': {
-    name: 'User',
-    watchKey: 'userInfo.userId',
+  'Login': {
+    name: 'Login',
+    watchKey: 'userInfo',
     onUpdate(val) {
-      //获取到userinfo里的userId则触发此钩子
-      return !!val;
+      //获取到userinfo里的_id则触发此钩子
+      return !!val._id;
     }
   },
 }, globalData || 'globalData')
@@ -41,6 +44,7 @@ App({
         traceUser: true,
       });
     }
+    const db = wx.cloud.database()
     wx.cloud.callFunction({
       name: 'quickstartFunctions',
       config: {
@@ -49,21 +53,35 @@ App({
       data: {
         type: 'getOpenId'
       }
-    }).then((resp) => {
-      console.log(resp.result)
-      const openid = resp.result.openid
-      const userInfo = wx.getStorageSync(openid)
+    }).then(async (resp) => {
+      const _openid = resp.result.openid
+      const userInfo = wx.getStorageSync(_openid)
+      this.globalData._openid = _openid
       if(userInfo) {
-        console.log("有用户信息缓存",userInfo)
+        const lastLogin = wx.getStorageSync(LastLoginKey)
+        if (!lastLogin) {
+          console.log("上次登录未保存时间")
+          return
+        }
+        const current = new Date()
+        // 一个月 2592000000 ms
+        if(current.getTime() - lastLogin.getTime() > 2592000000) {
+          console.log("距离上次登录已经超过一个月")
+          return
+        }
+        const getUser = await db.collection('members').where({
+          _openid: _openid
+        }).get()
+        if(getUser.data.length > 0) {  // 用户确认存在
+          const user = getUser.data[0]
+          console.log(user)
+          this.globalData.userInfo = userInfo
+        }
       } else {
         console.log("无用户信息缓存缓存")
       }
-      wx.hideLoading();
     }).catch((e) => {
-      this.setData({
-        showUploadTip: true
-      });
-      wx.hideLoading();
+      console.log(e)
     });
   }
 });
