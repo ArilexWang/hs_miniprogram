@@ -1,0 +1,87 @@
+<view class="main-color" style="width:100vw;min-height:100vh">
+  <view>
+    <swiper style="height:230px;width:100vw" indicator-dots="{{true}}" autoplay="{{false}}" circular="{{true}}">
+      <swiper-item wx:for="{{banners}}" wx:key="*this">
+        <image style="width:100vw" mode="widthFix" src="{{item}}"></image>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <view wx:if="{{!selectedPeriod}}" class="flex flex-column flex-align-center">
+    <van-dropdown-menu style="width:100vw;">
+      <van-dropdown-item value="{{ selectedIndex }}" options="{{ options }}" bind:change="onDayItemClick" />
+    </van-dropdown-menu>
+    <view class="flex-row period" wx:for="{{periods}}" wx:key="index">
+      <view class="item">{{item.hourFormat}}</view>
+      <view class="item" wx:if="{{item.avaliable == 1}}"> 可预订 </view>
+      <view class="item" style="color:#5a5c67" wx:elif="{{item.avaliable == 0}}"> 不可预订 </view>
+      <view class="item highlight-color" style="color:#d8313d" wx:elif="{{item.avaliable == 2}}"> 已订满 </view>
+      <view class="item" bindtap="onSelectedClicked" id="{{index}}">
+        <text class="{{(item.avaliable == 1) ? 'selectBtn' : 'unSelectBtn'}}">选择场地</text>
+      </view>
+    </view>
+  </view>
+  <view wx:else class="flex flex-column flex-align-center" style="margin-bottom: 30px;">
+    <!-- 预约时间 -->
+    <view class="period flex-column flex-content-arround" style="height: 50px; border:1px rgb(163, 163, 163) solid;margin: 10px;">
+      <view style="margin-left: 15px;">预约时间：{{selectedPeriod.format}}</view>
+    </view>
+    <!-- 场地 -->
+    <view class="flex flex-column" style="width: 70vw;">
+      <view class="flex flex-row flex-align-center section flex-content-arround">
+        <view>室内</view>
+        <view class="flex flex-row" style="flex:1 1 300px">
+          <image class="court_img" src="{{selectedPeriod.courts[0].imageUrl}}" mode='heightFix' id="{{0}}" bindtap="onCourtClick"></image>
+          <image class="court_img" src="{{selectedPeriod.courts[1].imageUrl}}" mode='heightFix' id="{{1}}" bindtap="onCourtClick"></image>
+        </view>
+      </view>
+      <view class="flex flex-row flex-align-center section flex-content-arround">
+        <view>室外</view>
+        <view class="flex flex-row" style="flex:1 1 300px">
+          <image class="court_img" src="{{selectedPeriod.courts[2].imageUrl}}" mode='heightFix' id="{{2}}" bindtap="onCourtClick"></image>
+          <image class="court_img" src="{{selectedPeriod.courts[3].imageUrl}}" mode='heightFix' id="{{3}}" bindtap="onCourtClick"></image>
+        </view>
+      </view>
+      <view class="flex flex-row flex-align-center section flex-content-arround">
+        <view>室外</view>
+        <view class="flex flex-row" style="flex:1 1 300px">
+          <image class="court_img" src="{{selectedPeriod.courts[4].imageUrl}}" mode='heightFix' id="{{4}}" bindtap="onCourtClick"></image>
+          <image class="court_img" src="{{selectedPeriod.courts[5].imageUrl}}" mode='heightFix' id="{{5}}" bindtap="onCourtClick"></image>
+        </view>
+      </view>
+    </view>
+    <!-- 其他 -->
+    <view class="flex flex-column flex-align-center flex-content-center" style="width: 100vw;">
+      <checkbox-group class="flex flex-column flex-content-center" bindchange="checkBoxChanged">
+        <view style="margin: 5px;margin-bottom: 10px;">
+          <checkbox value="0" checked="{{selectedPeriod.needReferee}}" />需要裁判（120元/场，线下支付）
+        </view>
+
+        <view style="width: 95vw; border: 1px rgb(163, 163, 163) solid;">
+          <view style="margin: 5px">
+            <view>选择投篮机时段（如需）</view>
+            <view style="margin-top: 5px;" class="flex flex-row flex-align-center">
+              <view>
+                <checkbox value="1" disabled="{{!selectedPeriod.canOrderFirstShoot}}" />{{selectedPeriod.firstFormat}}
+              </view>
+              <view style="margin-left: 10px;">
+                <checkbox value="2" disabled="{{!selectedPeriod.canOrderFirstShoot}}" />{{selectedPeriod.lastFormat}}
+              </view>
+            </view>
+            <view style="margin:5px">投篮机费用：180元/小时（仅室内场可用，可用时段为工作日全天和周末晚上）</view>
+          </view>
+        </view>
+      </checkbox-group>
+
+    </view>
+    <!-- 确认 -->
+    <view class="flex flex-row flex-content-arround" style="width: 60vw; margin-top:10px;">
+      <view class="item" bindtap="onCancelClick" id="{{index}}">
+        <text class="selectBtn">取消</text>
+      </view>
+      <view class="item" bindtap="onConfirmClick" id="{{index}}">
+        <text class="selectBtn">确认</text>
+      </view>
+    </view>
+  </view>
+</view>

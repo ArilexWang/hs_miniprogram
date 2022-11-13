@@ -41,7 +41,55 @@ Page({
   getPhoneNumber(e) {
     console.log(e)
   },
-  getUserProfile() {
+  testCloudFunction() {
+    const params = {
+      "phoneNum": "1",
+      "courts": [{
+        "_id": 2,
+        "name": "A2",
+        "price": 260
+      }],
+      "date": 1668182400000,
+      "period": {
+        "_id": "c03e44456366556300a2a2b47c25d0c0",
+        "courts": [2, 3, 4, 5, 6],
+        "day": 6,
+        "end": 1668139200000,
+        "start": 1668132000000,
+        "format": "10:00 - 12:00"
+      },
+      "price": 260,
+      "member": {
+        "_id": "649330e263690e68006c528b3f95fa1a",
+        "_openid": "ootUG4_x-ypBrAAKbAZiJt8S-aeE",
+        "avatarUrl": "https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLEjk9w6ibSplRD14OKicC3hOGNJbh6zRWB0qicqf2miclxNh4PgIaNNbZXEhaGpWScIQd65ccnu43Pxw/132",
+        "cash": 1000,
+        "created": "2022-11-07T13:55:51.867Z",
+        "integral": 0,
+        "nickName": "Alex王振",
+        "phoneNum": "1",
+        "validTimes": 0
+      },
+      "status": 0
+    }
+    // wx.cloud.callFunction({
+    //   name: "createCourtOrder",
+    //   data: {
+    //     params: params
+    //   },
+    // })
+
+    wx.cloud.callFunction({
+      name: "confirmCourtOrder",
+      data: {
+        orderId: '30ed8da3636f4b32007eafd029e3dc92',
+        payBy: 0
+      },
+    })
+  },
+  async getUserProfile() {
+    // this.testCloudFunction()
+    // return
     wx.getUserProfile({
       desc: 'desc',
       success: async function (res) {
@@ -91,6 +139,7 @@ Page({
       showQRCode: true
     })
     const query = wx.createSelectorQuery()
+    const that = this
     query.select('#myQRCode')
       .fields({
         node: true,
@@ -102,31 +151,35 @@ Page({
         drawQrcode({
           canvas: canvas,
           canvasId: 'myQRCode',
-          width: 260,
-          height: 260,
+          width: 300,
+          height: 300,
           padding: 30,
           background: '#ffffff',
           foreground: '#000000',
-          text: '大王顶真帅',
+          text: app.globalData.userInfo._id,
         })
 
         // 获取临时路径（得到之后，想干嘛就干嘛了）
-        // wx.canvasToTempFilePath({
-        //     canvasId: 'myQrcode',
-        //     canvas: canvas,
-        //     x: 0,
-        //     y: 0,
-        //     width: 260,
-        //     height: 260,
-        //     destWidth: 260,
-        //     destHeight: 260,
-        //     success(res) {
-        //         console.log('二维码临时路径：', res.tempFilePath)
-        //     },
-        //     fail(res) {
-        //         console.error(res)
-        //     }
-        // })
+        wx.canvasToTempFilePath({
+          canvasId: 'myQRCode',
+          canvas: canvas,
+          x: 0,
+          y: 0,
+          width: 300,
+          height: 300,
+          destWidth: 300,
+          destHeight: 300,
+          success(res) {
+            if (res.tempFilePath.length > 0) {
+              that.setData({
+                qrCodeImgUrl: res.tempFilePath
+              })
+            }
+          },
+          fail(res) {
+            console.error(res)
+          }
+        })
       })
   },
   onClickOverlay() {

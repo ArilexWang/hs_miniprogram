@@ -2,6 +2,7 @@
   "dependencies": {
     "@vant/weapp": "^1.5.2",
     "spa-custom-hooks": "^1.2.6",
-    "weapp-qrcode-canvas-2d": "^1.1.2"
+    "weapp-qrcode-canvas-2d": "^1.1.2",
+    "dateformat": "^3.0.3"
   }
 }

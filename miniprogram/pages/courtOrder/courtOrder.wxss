@@ -1,0 +1,12 @@
+/* pages/courtOrder/courtOrder.wxss */
+.item {
+  width: 80vw;
+  margin: 10px;
+}
+
+.selectBtn {
+  background-color: #ffffff;
+  padding: 5px 10px 5px 10px;
+  border-radius: 6px;
+  border: 1px solid rgb(139, 138, 138);
+}

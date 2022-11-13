@@ -42,10 +42,12 @@
       </view>
     </van-overlay> -->
 </view>
+
 <view wx:else class="container, main-color">
-  <!-- <van-overlay show="{{ showQRCode }}" bind:click="onHideMask">
-    <canvas type="2d" id="myQRCode"></canvas>
-  </van-overlay> -->
+  <page-container show="{{showQRCode}}" position="center" custom-style="height:30vh; width:60vw;left:20vw;top:20vh">
+    <canvas style="width: 0px; height: 0px;" type="2d" id="myQRCode"></canvas>
+    <image src="{{qrCodeImgUrl}}" style="width: 60vw;height: 30vh;"></image>
+  </page-container>
   <view class="main-content">
     <view class="flex-row flex-content-between flex-align-center" style="width: 95vw;">
       <view class="flex-row flex-align-center" style="margin:10px">

@@ -1,0 +1,38 @@
+/* pages/stadium/stadium.wxss */
+.period {
+  width: 95vw;
+  border: 1px rgb(163, 163, 163) solid;
+}
+
+.item {
+  height: 50px;
+  line-height: 50px;
+  flex: 1 1 300px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  color: black;
+}
+
+.unSelectBtn {
+  background-color: #ffffff;
+  padding: 5px 10px 5px 10px;
+  border: 1px solid rgb(139, 138, 138);
+  border-radius: 6px;
+}
+
+.selectBtn {
+  background-color: #ffffff;
+  padding: 5px 10px 5px 10px;
+  border-radius: 6px;
+  border: 1px solid rgb(139, 138, 138);
+}
+
+.court_img{
+  height: 120px;
+}
+
+.section {
+  margin-top: 5px;
+}

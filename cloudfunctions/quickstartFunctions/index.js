@@ -23,4 +23,5 @@ exports.main = async (event, context) => {
     case 'sumRecord':
       return await sumRecord.main(event, context);
   }
+  return "HelloWorld"
 };

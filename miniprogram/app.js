@@ -1,18 +1,20 @@
 // app.js
 import CustomHook from 'spa-custom-hooks';
-import { LastLoginKey } from './utils/const'
+import {
+  LastLoginKey
+} from './utils/const'
 
 let globalData = {
   // 是否已拿到token
   _openid: '',
   // 用户信息
   userInfo: {
-    _id:'',
+    _id: '',
     _openid: '',
     nickName: '',
     avatarUrl: '',
   },
-  env:'test-7ggypkpn0dd471ba'
+  env: 'test-7ggypkpn0dd471ba'
 }
 CustomHook.install({
   'GetOpenid': {
@@ -57,7 +59,8 @@ App({
       const _openid = resp.result.openid
       const userInfo = wx.getStorageSync(_openid)
       this.globalData._openid = _openid
-      if(userInfo) {
+      console.log(_openid, userInfo)
+      if (userInfo) {
         const lastLogin = wx.getStorageSync(LastLoginKey)
         if (!lastLogin) {
           console.log("上次登录未保存时间")
@@ -65,17 +68,19 @@ App({
         }
         const current = new Date()
         // 一个月 2592000000 ms
-        if(current.getTime() - lastLogin.getTime() > 2592000000) {
+        if (current.getTime() - lastLogin.getTime() > 2592000000) {
           console.log("距离上次登录已经超过一个月")
           return
         }
         const getUser = await db.collection('members').where({
           _openid: _openid
         }).get()
-        if(getUser.data.length > 0) {  // 用户确认存在
+        if (getUser.data.length > 0) { // 用户确认存在
           const user = getUser.data[0]
-          console.log(user)
-          this.globalData.userInfo = userInfo
+          console.log('用户已注册',user)
+          this.globalData.userInfo = user
+          wx.setStorageSync(_openid, user)
+          wx.setStorageSync(LastLoginKey, new Date())
         }
       } else {
         console.log("无用户信息缓存缓存")
