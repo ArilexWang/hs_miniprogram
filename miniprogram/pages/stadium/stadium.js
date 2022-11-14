@@ -9,7 +9,7 @@ Page({
    */
   data: {
     options: [],
-    selectedIndex: 6,
+    selectedIndex: 5,
     banners: ['https://huiwan-1304067511.cos.ap-guangzhou.myqcloud.com/IMG_0437.JPG ', '	https://huiwan-1304067511.cos.ap-guangzhou.myqcloud.com/IMG_0436.JPG'],
   },
 
@@ -17,10 +17,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    console.log(this.calculateAvaliableDay())
     const validDays = this.calculateAvaliableDay()
     this.setData({
       options: validDays
+    })
+    wx.showLoading({
+      title: '加载中',
     })
     const getCourts = await db.collection('courts').where({
       _id: db.command.lt(7)
@@ -30,9 +32,16 @@ Page({
     })
     const selectedDate = this.data.options[this.data.selectedIndex].date
     const periods = await this.getPeriods(selectedDate)
+    wx.hideLoading({
+      success: (res) => {},
+    })
     this.setData({
       periods: periods
     })
+  },
+
+  onLoadLogin(val) {
+    console.log("场馆页的onLoadLogin", app.globalData)
   },
 
   //计算可选日期
@@ -55,10 +64,16 @@ Page({
     this.setData({
       selectedIndex: e.detail
     })
+    wx.showLoading({
+      title: '加载中',
+    })
     const selectedDate = this.data.options[e.detail].date
     const periods = await this.getPeriods(selectedDate)
     this.setData({
       periods: periods
+    })
+    wx.hideLoading({
+      success: (res) => {},
     })
   },
 
@@ -88,6 +103,10 @@ Page({
   },
 
   async onSelectedClicked(e) {
+    if (app.globalData.userInfo._id.length === 0) {
+      console.log("未登录")
+      return
+    }
     const period = this.data.periods[e.currentTarget.id]
     period.courts = period.courts.map((item) => {
       item.imageUrl = '../../src/' + item.name + '-' + item.status + '.jpg'

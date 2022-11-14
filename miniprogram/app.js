@@ -14,6 +14,7 @@ let globalData = {
     nickName: '',
     avatarUrl: '',
   },
+  hasRegister: false,
   env: 'test-7ggypkpn0dd471ba'
 }
 CustomHook.install({
@@ -31,6 +32,14 @@ CustomHook.install({
     onUpdate(val) {
       //获取到userinfo里的_id则触发此钩子
       return !!val._id;
+    }
+  },
+  'Register': {
+    name: 'Register',
+    watchKey: 'hasRegister',
+    onUpdate(val) {
+      //获取到userinfo里的_id则触发此钩子
+      return !!val;
     }
   },
 }, globalData || 'globalData')
@@ -57,34 +66,30 @@ App({
       }
     }).then(async (resp) => {
       const _openid = resp.result.openid
-      const userInfo = wx.getStorageSync(_openid)
       this.globalData._openid = _openid
-      console.log(_openid, userInfo)
-      if (userInfo) {
-        const lastLogin = wx.getStorageSync(LastLoginKey)
-        if (!lastLogin) {
-          console.log("上次登录未保存时间")
-          return
-        }
-        const current = new Date()
-        // 一个月 2592000000 ms
-        if (current.getTime() - lastLogin.getTime() > 2592000000) {
-          console.log("距离上次登录已经超过一个月")
-          return
-        }
-        const getUser = await db.collection('members').where({
-          _openid: _openid
-        }).get()
-        if (getUser.data.length > 0) { // 用户确认存在
-          const user = getUser.data[0]
-          console.log('用户已注册',user)
-          this.globalData.userInfo = user
-          wx.setStorageSync(_openid, user)
-          wx.setStorageSync(LastLoginKey, new Date())
-        }
-      } else {
-        console.log("无用户信息缓存缓存")
+      const getUser = await db.collection('members').where({
+        _openid: _openid
+      }).get()
+      if (getUser.data.length === 0) {
+        // 用户不存在
+        return
       }
+      console.log('用户已注册', getUser)
+      this.globalData.hasRegister = true
+
+      const lastLogin = wx.getStorageSync(LastLoginKey)
+      if (!lastLogin) {
+        console.log("上次登录未保存时间")
+        return
+      }
+      const current = new Date()
+      // 一个月 2592000000 ms
+      if (current.getTime() - lastLogin.getTime() > 2592000000) {
+        console.log("距离上次登录已经超过一个月")
+        return
+      }
+      wx.setStorageSync(LastLoginKey, current)
+      this.globalData.userInfo = getUser.data[0]
     }).catch((e) => {
       console.log(e)
     });

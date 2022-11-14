@@ -71,24 +71,76 @@ Page({
       period: period
     })
   },
+  async confirmOrder() {
+    
+  },
   async onConfirmClick(){
-    console.log('confirm', JSON.stringify(this.data.period))
+    const res111 = await wx.cloud.callFunction({
+      name: 'payByCash',
+      data: {
+        openid: app.globalData.userInfo._openid,
+        orderType: 0,
+        orderid: '84f7894263724bab009f34a06dc9bf9e'
+      }
+    })
+    return
+    const that = this
+    wx.showModal({
+      title: '是否确认预约场地？',
+      content: "订单确认后会优先扣除账户余额。若使用微信支付，请在5分钟内支付完成，否则订单将失效。",
+      success (res) {
+        if (res.confirm) {
+          that.confirmOrder()
+          console.log('用户点击确定')
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+    return
+    wx.showLoading({
+      title: '订单创建中',
+    })
     const res = await wx.cloud.callFunction({
       name: 'createCourtOrder',
       data: {
         params: this.data.period
       }
     })
-    console.log(res)
+    wx.hideLoading({
+      success: (res) => {},
+    })
     if (!res.result._id) {
       console.log(res.result.errorMsg)
+      wx.showModal({
+        title: '提示',
+        content: res.result.errorMsg,
+        showCancel: false,
+        success (res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      })
       return
     }
     console.log("创建订单成功")
     const newOrder = res.result
     if (this.data.userInfo.cash > newOrder.price) {
       console.log("用户余额充足")
+      // 订单创建成功，弹出使用余额支付的确认弹窗
+      const confirmRes = await wx.cloud.callFunction({
+        name: 'confirmCourtOrder',
+        data: {
+          params: this.data.period
+        }
+      })
+      return
     }
+    // 余额不足，调用微信支付
+    console.log("余额不足，调用微信支付")
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

@@ -1,5 +1,7 @@
 <!--miniprogram/pages/courtOrder/courtOrder.wxml-->
 <view class="container main-color">
+  <view style="width: 90vw;margin: 20px;">确认预约后，优先扣除账户余额进行支付。\n 使用微信支付需在5分钟内完成付款，否则订单将失效。</view>
+  <view class="seperate-line"></view>
   <view class="flex flex-column flex-content-arround">
     <view class="flex-row flex-content-between item">
       <view>预约场地</view>
@@ -30,7 +32,7 @@
     <view wx:if="{{userInfo.integral > 500}}">
       <checkbox-group class="flex flex-column flex-content-center" bindchange="checkBoxChanged">
         <view style="margin: 5px;margin-bottom: 10px;">
-          <checkbox value="0"/>是否使用积分抵扣
+          <checkbox value="0" />是否使用积分抵扣
         </view>
       </checkbox-group>
     </view>
@@ -43,11 +45,11 @@
     </view>
   </view>
   <view class="flex flex-row flex-content-arround" style="width: 60vw; margin-top:30px;">
-      <view bindtap="onCancelClick">
-        <text class="selectBtn">取消</text>
-      </view>
-      <view bindtap="onConfirmClick">
-        <text class="selectBtn">确认</text>
-      </view>
+    <view bindtap="onCancelClick">
+      <text class="selectBtn">取消</text>
     </view>
+    <view bindtap="onConfirmClick">
+      <text class="selectBtn">确认</text>
+    </view>
+  </view>
 </view>

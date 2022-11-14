@@ -11,14 +11,15 @@
       </view>
 
     </view>
-    <view class="flex-center">
-      <text class=".phone">{{userInfo.phoneNum}}</text>
+    <view wx:if="{{!hasRegister}}" class="flex-center">
+      <text class=".phone">{{phoneNum}}</text>
       <button class="getPhoneBtn" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">获取手机号</button>
     </view>
     <label class="checkbox">
       <switch type="checkbox" bindchange="switchChanged" checked="{{switchChecked}}" />我已认真阅读并接受该免责说明
     </label>
-    <button class="loginBtn, highlight-background" bindtap="getUserProfile">授权登录</button>
+    <button wx:if="{{!hasRegister}}" class="loginBtn, highlight-background" bindtap="onRegisterClick">授权自动注册</button>
+    <button wx:else class="loginBtn, highlight-background" bindtap="onLoginClick">授权登录</button>
   </view>
   <van-dialog id="van-dialog" />
 

@@ -12,9 +12,12 @@ Page({
    * 页面的初始数据
    */
   data: {
+    hasRegister: false,
     hasLogin: false,
     showOverlay: false,
-    showQRCode: false
+    showQRCode: false,
+    phoneNum: '',
+    switchChecked: false,
   },
 
   /**
@@ -22,6 +25,12 @@ Page({
    */
   onLoad(options) {
 
+  },
+  onLoadRegister() {
+    console.log("登录页的onLoadRegister")
+    this.setData({
+      hasRegister: true
+    })
   },
   onLoadLogin() { // 已登录
     console.log('登录页的onLoadLogin', app.globalData.userInfo, app.globalData.userInfo._id.length);
@@ -38,8 +47,38 @@ Page({
       userInfo: app.globalData.userInfo
     })
   },
-  getPhoneNumber(e) {
-    console.log(e)
+  async getPhoneNumber(e) {
+    if (e.detail.errMsg !== "getPhoneNumber:ok") {
+      console.log("授权失败")
+      return
+    }
+    wx.showLoading({
+      title: '加载中',
+    })
+    const res = await wx.cloud.callFunction({
+      name: 'getPhoneNum',
+      data: {
+        phoneData: wx.cloud.CloudID(e.detail.cloudID),
+      }
+    })
+    wx.hideLoading({
+      success: () => {},
+    })
+    console.log(res)
+    const phoneNum = res.result.event.phoneData.data.phoneNumber
+    if (phoneNum.length === 0) {
+      console.log("获取手机号失败")
+      return
+    }
+    console.log(phoneNum)
+    this.setData({
+      phoneNum: phoneNum
+    })
+  },
+  switchChanged(e) {
+    this.setData({
+      switchChecked: e.detail.value
+    })
   },
   testCloudFunction() {
     const params = {
@@ -72,13 +111,6 @@ Page({
       },
       "status": 0
     }
-    // wx.cloud.callFunction({
-    //   name: "createCourtOrder",
-    //   data: {
-    //     params: params
-    //   },
-    // })
-
     wx.cloud.callFunction({
       name: "confirmCourtOrder",
       data: {
@@ -87,50 +119,71 @@ Page({
       },
     })
   },
-  async getUserProfile() {
-    // this.testCloudFunction()
-    // return
+  async onLoginClick() {
+    if (!this.data.switchChecked) {
+      wx.showToast({
+        title: '未同意免责说明',
+        icon: "error"
+      })
+      return
+    }
+    if (app.globalData._openid.length === 0) {
+      console.log("登录失败，openid为空")
+      return
+    }
+    const getMember = await db.collection('members').where({
+      _openid: app.globalData._openid
+    }).get()
+    if (getMember.data.length !== 1) {
+      console.log("获取用户信息失败")
+    }
+    const member = getMember.data[0]
+    wx.setStorageSync(LastLoginKey, new Date())
+    app.globalData.userInfo = member
+  },
+  async onRegisterClick() {
+    if (this.data.phoneNum.length === 0) {
+      wx.showToast({
+        title: '未获取正确手机号',
+        icon: "error"
+      })
+      return
+    }
+    if (!this.data.switchChecked) {
+      wx.showToast({
+        title: '未同意免责说明',
+        icon: "error"
+      })
+      return
+    }
+    const that = this
     wx.getUserProfile({
       desc: 'desc',
       success: async function (res) {
-        if (app.globalData._openid.length <= 0) {
-          log.error("getUserProfile 未获取openid")
+        const user = res.userInfo
+        const newMember = {
+          created: new Date(),
+          phoneNum: that.data.phoneNum,
+          nickName: user.nickName,
+          avatarUrl: user.avatarUrl,
+          cash:0,
+          validTimes:0,
+          integral: 0,
+        }
+        console.log(newMember)
+        const addMember = await db.collection('members').add({
+          data: newMember
+        })
+        console.log(addMember)
+        if (addMember._id.length === 0) {
+          wx.showToast({
+            title: '注册失败，请联系客服',
+            icon: 'error'
+          })
           return
         }
-        const _openid = app.globalData._openid
-        const getUser = await db.collection('members').where({
-          _openid: _openid
-        }).get()
-        if (getUser.data.length > 0) {
-          console.log("用户已注册")
-          const user = getUser.data[0]
-          app.globalData.userInfo = user
-          wx.setStorageSync(_openid, user)
-          wx.setStorageSync(LastLoginKey, new Date())
-        } else {
-          console.log("用户未注册")
-          const newUser = await db.collection('members').add({
-            data: {
-              created: new Date(),
-              nickName: res.userInfo.nickName,
-              avatarUrl: res.userInfo.avatarUrl,
-              validTimes: 0,
-              cash: 0,
-              integral: 0
-            }
-          })
-          if (newUser._id.length > 0) {
-            // 创建用户成功
-            const getUser = await db.collection('members').doc(newUser._id).get()
-            if (getUser.data) {
-              const user = getUser.data
-              wx.setStorageSync(_openid, user)
-              wx.setStorageSync(LastLoginKey, new Date())
-              log.info("创建用户成功，用户名：" + user.nickName)
-              app.globalData.userInfo = user
-            }
-          }
-        }
+        newMember._id = addMember._id
+        app.globalData.userInfo = newMember
       }
     })
   },
@@ -190,7 +243,10 @@ Page({
   onLogoutClick() {
     console.log("点击logout")
     wx.clearStorageSync()
-    app.globalData.userInfo._id = ""
+    app.globalData.userInfo = {}
+    this.setData({
+      hasLogin: false
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

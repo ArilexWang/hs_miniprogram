@@ -1,8 +1,9 @@
 {
   "pages": [
+    "pages/userCenter/userCenter",
     "pages/courtOrder/courtOrder",
     "pages/stadium/stadium",
-    "pages/userCenter/userCenter",
+
     "pages/index/index",
     "pages/getOpenId/index",
     "pages/getMiniProgramCode/index",
