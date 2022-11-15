@@ -1,0 +1,53 @@
+<view class="main-color flex-column flex-align-center" style="min-height:100vh">
+  <van-notice-bar style="width:100vw;" left-icon="volume-o" mode="closeable" 
+    text="开场前三小时以上可以退款" />
+  <van-tabs active="{{ activeTab }}" bind:change="onTabChange" style="width:100vw;margin-bottom:10px">
+    <van-tab title="使用中"></van-tab>
+    <van-tab title="已退款"></van-tab>
+    <van-tab title="已过期"></van-tab>
+  </van-tabs>
+  <view class="main-content">
+    <view wx:for="{{courtOrders}}" wx:key="index" class="card">
+      <view class="flex-row flex-align-center">
+        <view class="flex-column" style="margin:10px">
+          <view class="flex-row item">
+            <view>预定日期：</view>
+            <view>{{item.dateFormat}}</view>
+          </view>
+          <view class="flex-row item">
+            <view>预定时间：</view>
+            <view>{{item.hourFormat}}</view>
+          </view>
+          <view class="flex-row item">
+            <view>预定场地：</view>
+            <view wx:for="{{item.selectedCourts}}" wx:for-item="itemName" wx:key="index" style="margin-right:4px">{{itemName.name}}
+            </view>
+          </view>
+          
+          <view class="flex-row item">
+            <view wx:if="{{item.firstShoot || item.secondShoot}}">投篮机：</view>
+            <view wx:if="{{item.firstShoot && item.secondShoot}}">{{item.hourFormat}}</view>
+            <view wx:if="{{item.firstShoot && !item.secondShoot}}">{{item.firstFormat}}</view>
+            <view wx:if="{{item.secondShoot && !item.firstShoot}}" style="margin-left: 5px;">{{item.lastFormat}}</view>
+          </view>
+          <view wx:if="{{item.needReferee}}" class="flex-row item">
+            <view>已预约裁判</view>
+          </view>
+        </view>
+      </view>
+      <view class="flex-column flex-align-center">
+        <view class="highlight-color" id="{{index}}" wx:if="{{item.status === 0}}" style="margin-right:10px">未支付</view>
+        <view class="highlight-color" id="{{index}}" wx:elif="{{item.status === 2}}" style="margin-right:10px">已退款</view>
+        <image wx:if="{{item.status === 1}}" src="../../src/qrcode.png" style="width:50px;margin:10px" mode="widthFix" bindtap="qcCodeClick"></image>
+        <view class="confirmBtn highlight-background" id="{{index}}" wx:if="{{item.status === 1}}"
+          bindtap="onRefundClick">退款</view>
+      </view>
+    </view>
+  </view>
+  <van-dialog id="van-dialog" />
+  <van-overlay show="{{ showOverlay }}" bind:click="onHideMask">
+    <view class="wrapper">
+      <canvas class="wrapper" style="width:250px;height:250px;background-color:white" canvas-id="myQrcode"></canvas>
+    </view>
+  </van-overlay>
+</view>

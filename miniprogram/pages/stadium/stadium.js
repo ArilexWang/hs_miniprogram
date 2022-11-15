@@ -9,7 +9,7 @@ Page({
    */
   data: {
     options: [],
-    selectedIndex: 5,
+    selectedIndex: 4,
     banners: ['https://huiwan-1304067511.cos.ap-guangzhou.myqcloud.com/IMG_0437.JPG ', '	https://huiwan-1304067511.cos.ap-guangzhou.myqcloud.com/IMG_0436.JPG'],
   },
 
@@ -17,6 +17,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
+    await this.reloadData()
+  },
+
+  async reloadData() {
     const validDays = this.calculateAvaliableDay()
     this.setData({
       options: validDays
@@ -32,6 +36,7 @@ Page({
     })
     const selectedDate = this.data.options[this.data.selectedIndex].date
     const periods = await this.getPeriods(selectedDate)
+    console.log(periods)
     wx.hideLoading({
       success: (res) => {},
     })
@@ -162,6 +167,19 @@ Page({
   onConfirmClick() {
     console.log(this.data.selectedPeriod)
     const period = this.data.selectedPeriod
+    var selected = false
+    period.courts.forEach(element => {
+      if(element.status === 2) {
+        selected = true
+      }
+    });
+    if (!selected) {
+      wx.showToast({
+        title: '未选择场地',
+        icon: 'error',
+      })
+      return
+    }
     if (period.firstShoot || period.secondShoot) {
       var valid = false
       period.courts.forEach(element => {
@@ -197,14 +215,15 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.setData({
+      selectedPeriod: null
+    })
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide() {
-
   },
 
   /**
@@ -217,8 +236,11 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh() {
-
+  async onPullDownRefresh() {
+    await this.reloadData()
+    wx.stopPullDownRefresh({
+      success: (res) => {},
+    })
   },
 
   /**

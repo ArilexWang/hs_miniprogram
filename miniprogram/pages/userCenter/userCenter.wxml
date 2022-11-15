@@ -53,7 +53,7 @@
     <view class="flex-row flex-content-between flex-align-center" style="width: 95vw;">
       <view class="flex-row flex-align-center" style="margin:10px">
         <image style="width: 60px;height:60px;border-radius:30px;margin:5px" mode="aspectFit" src="{{userInfo.avatarUrl}}"></image>
-        <text>{{userInfo.nickName}}</text>
+        <text>{{userInfo.phoneNum}}</text>
       </view>
       <image src="../../src/qrcode.png" style="width:50px;margin:10px" mode="widthFix" bindtap="qcCodeClick"></image>
     </view>

@@ -39,6 +39,11 @@ exports.main = async (event, context) => {
   currentPeriod.canOrderFirstShoot = true
   currentPeriod.canOrderSecondShoot = true
   orders.forEach(element => {
+    if (element.status === 2) {
+      // 已退款订单
+      console.log("已退款订单")
+      return
+    }
     if (element.status === 0 && currentTimestamp - element.created > 300000) {
       return // 无效订单
     }
@@ -46,7 +51,7 @@ exports.main = async (event, context) => {
       return // 无效订单
     }
     console.log('element', element)
-    existCourts = existCourts.concat(element.courts)
+    existCourts = existCourts.concat(element.selectedCourts)
     if (element.firstShoot) {
       currentPeriod.canOrderFirstShoot = false
     }

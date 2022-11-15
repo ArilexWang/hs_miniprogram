@@ -1,28 +1,13 @@
 {
   "pages": [
     "pages/userCenter/userCenter",
-    "pages/courtOrder/courtOrder",
+    "pages/courtOrders/courtOrders",
     "pages/stadium/stadium",
-
-    "pages/index/index",
-    "pages/getOpenId/index",
-    "pages/getMiniProgramCode/index",
-    "pages/deployService/index",
-    "pages/createCollection/index",
-    "pages/uploadFile/index",
-    "pages/selectRecord/index",
-    "pages/updateRecord/index",
-    "pages/updateRecordResult/index",
-    "pages/updateRecordSuccess/index",
-    "pages/sumRecord/index",
-    "pages/sumRecordResult/index"
-    
+    "pages/courtOrder/courtOrder"
   ],
+  
   "tabBar": {
-    "color": "black",
-    "selectedColor": "#d8313d",
-    "borderStyle": "black",
-    "backgroundColor": "white",
+
     "list": [
       {
         "pagePath": "pages/stadium/stadium",
@@ -41,6 +26,6 @@
     "navigationBarTitleText": "荟晟篮球",
     "navigationBarTextStyle": "black"
   },
-  "sitemapLocation": "sitemap.json",
-  "style": "v2"
+  "sitemapLocation": "sitemap.json"
 }
+

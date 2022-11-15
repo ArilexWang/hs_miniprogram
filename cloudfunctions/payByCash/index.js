@@ -8,7 +8,7 @@ const db = cloud.database({
 })
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const wxContext = cloud.getWXContext()
+  // event: { orderType, orderid, openid }
   var collection = ''
   switch (event.orderType) {
     case 0:
@@ -36,33 +36,43 @@ exports.main = async (event, context) => {
     return { errorMsg: '查询用户失败' }
   }
   const member = getMember.data[0]
+  console.log(member)
   var actualPrice = order.price
-  var needIntegal = 0
+  var costIntegral = 0
   if (order.useIntegral && member.integral >= 500) { // 使用积分
     if (member.integral > order.price * 100) { // 用积分可以完成支付
-      needIntegal = order.price * 100
+      costIntegral = order.price * 100
       actualPrice = 0
     } else {
-      needIntegal = member.integral
-      actualPrice = order.price - (needIntegal / 100)
+      costIntegral = member.integral
+      actualPrice = order.price - (costIntegral / 100)
     }
   }
   if (member.cash < actualPrice) { // 余额不足
     return { errorMsg: '余额不足，支付失败' }
   }
-
-  const updateMember = await memberTransaction.doc(member.id).update({
+  console.log(member.cash, actualPrice)
+  const updateMember = await memberTransaction.doc(member._id).update({
     data: {
       cash: member.cash - actualPrice,
-      intergal: member.integral - needIntegal
+      intergal: member.integral - costIntegral
     }
   })
   console.log(updateMember)
-  
-  return {
-    event,
-    openid: wxContext.OPENID,
-    appid: wxContext.APPID,
-    unionid: wxContext.UNIONID,
+  if(updateMember.stats.updated !== 1) {
+    return { errorMsg: '更新用户余额失败' }
   }
+  const updateOrder = await orderTransaction.doc(order._id).update({
+    data:{
+      status: 1,
+      payBy: 0,
+      costIntegral: costIntegral,
+      actualPrice: actualPrice
+    }
+  })
+  if(updateOrder.stats.updated !== 1) {
+    return { errorMsg: '更新订单状态失败' }
+  }
+  await transaction.commit()
+  return { errorMsg: 'success' }
 }

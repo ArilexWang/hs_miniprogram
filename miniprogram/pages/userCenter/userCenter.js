@@ -80,45 +80,6 @@ Page({
       switchChecked: e.detail.value
     })
   },
-  testCloudFunction() {
-    const params = {
-      "phoneNum": "1",
-      "courts": [{
-        "_id": 2,
-        "name": "A2",
-        "price": 260
-      }],
-      "date": 1668182400000,
-      "period": {
-        "_id": "c03e44456366556300a2a2b47c25d0c0",
-        "courts": [2, 3, 4, 5, 6],
-        "day": 6,
-        "end": 1668139200000,
-        "start": 1668132000000,
-        "format": "10:00 - 12:00"
-      },
-      "price": 260,
-      "member": {
-        "_id": "649330e263690e68006c528b3f95fa1a",
-        "_openid": "ootUG4_x-ypBrAAKbAZiJt8S-aeE",
-        "avatarUrl": "https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLEjk9w6ibSplRD14OKicC3hOGNJbh6zRWB0qicqf2miclxNh4PgIaNNbZXEhaGpWScIQd65ccnu43Pxw/132",
-        "cash": 1000,
-        "created": "2022-11-07T13:55:51.867Z",
-        "integral": 0,
-        "nickName": "Alex王振",
-        "phoneNum": "1",
-        "validTimes": 0
-      },
-      "status": 0
-    }
-    wx.cloud.callFunction({
-      name: "confirmCourtOrder",
-      data: {
-        orderId: '30ed8da3636f4b32007eafd029e3dc92',
-        payBy: 0
-      },
-    })
-  },
   async onLoginClick() {
     if (!this.data.switchChecked) {
       wx.showToast({
@@ -161,6 +122,7 @@ Page({
       desc: 'desc',
       success: async function (res) {
         const user = res.userInfo
+        console.log(res)
         const newMember = {
           created: new Date(),
           phoneNum: that.data.phoneNum,
@@ -184,7 +146,10 @@ Page({
         }
         newMember._id = addMember._id
         app.globalData.userInfo = newMember
-      }
+      },
+      fail: function (error) {
+        console.log("获取用户信息失败", error)
+      },
     })
   },
   qcCodeClick() {
@@ -238,6 +203,11 @@ Page({
   onClickOverlay() {
     this.setData({
       showQRCode: false
+    })
+  },
+  onCourtOrderClick() {
+    wx.navigateTo({
+      url: '../courtOrders/courtOrders',
     })
   },
   onLogoutClick() {

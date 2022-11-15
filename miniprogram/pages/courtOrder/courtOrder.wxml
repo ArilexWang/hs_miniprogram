@@ -18,6 +18,10 @@
     <view wx:if="{{period.firstShoot || period.secondShoot}}" class="flex-row flex-content-between item">
       <view>投篮机时间</view>
       <!-- TODO -->
+      <view class="flex-row">
+        <view wx:if="{{period.firstShoot}}" style="margin-right: 5px;">{{period.firstFormat}}</view>
+        <view wx:if="{{period.secondShoot}}">{{period.lastFormat}}</view>
+      </view>
     </view>
     <view wx:if="{{period.needReferee}}" class="flex-row flex-content-between item">
       <view>需要裁判</view>

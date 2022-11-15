@@ -1,0 +1,31 @@
+/* miniprogram/pages/courtOrders/courtOrders.wxss */
+.card{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 90vw;
+  /* border-radius: 10px; */
+  border: 1px rgb(151, 151, 151) solid;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.item{
+  margin-bottom: 4px;
+}
+
+.confirmBtn {
+  color: white;
+  padding: 5px 15px 5px 15px;
+  border-radius: 10px;
+  width: 34px;
+  margin:5px
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}

@@ -79,7 +79,7 @@ courtHasExist = (orderParams, existOrders) => {
       return
     }
     console.log("有效订单：", order)
-    existCourts.push(...order.courts)
+    existCourts.push(...order.selectedCourts)
     if (order.firstShoot) {
       firstShoot = true
     }
