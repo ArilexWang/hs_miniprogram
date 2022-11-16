@@ -1,9 +1,7 @@
 // pages/courtOrder/courtOrder.js
 var dateFormat = require('dateformat');
 const app = getApp()
-
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -18,7 +16,7 @@ Page({
   async onLoad(options) {
     const eventChannel = this.getOpenerEventChannel()
     const that = this
-    eventChannel.on('acceptDataFromOpenerPage', async function  (data) {
+    eventChannel.on('acceptDataFromOpenerPage', async function (data) {
       const period = data.data
       const userInfo = app.globalData.userInfo
       console.log(userInfo)
@@ -26,25 +24,42 @@ Page({
         userInfo: userInfo
       })
       period._openid = userInfo._openid
-      const selectedCourts = []
-      console.log(period)
+      const tempSelectedCourts = []
       period.courts.forEach(element => {
         if (element.status === 2) {
-          selectedCourts.push(element)
+          tempSelectedCourts.push(element)
         }
       });
-      period.selectedCourts = selectedCourts
-      const selectedCourtNames = selectedCourts.map((item) => {
+      period.selectedCourts = tempSelectedCourts
+      const selectedCourtNames = tempSelectedCourts.map((item) => {
         return item.name
       })
       const selectedCourtsFormat = selectedCourtNames.join(',')
       period.selectedCourtsFormat = selectedCourtsFormat
       period.dateFormat = dateFormat(period.start, 'yyyy-mm-dd')
+      const {
+        start,
+        middle,
+        end,
+        needReferee,
+        firstShoot,
+        secondShoot,
+        selectedCourts,
+        _openid
+      } = period
+      const params = {
+        start,
+        middle,
+        end,
+        needReferee,
+        firstShoot,
+        secondShoot,
+        selectedCourts,
+        _openid
+      }
       const res = await wx.cloud.callFunction({
-        name: 'calculateCourtPrice',
-        data: {
-          courts: selectedCourts
-        }
+        name: 'calculateOrderPrice',
+        data: params
       })
       period.price = res.result.price
       period.actualPrice = res.result.price
@@ -74,10 +89,34 @@ Page({
     wx.showLoading({
       title: '订单创建中',
     })
+    const {
+      start,
+      middle,
+      end,
+      needReferee,
+      firstShoot,
+      secondShoot,
+      selectedCourts,
+      _openid,
+      price,
+      useIntegral
+    } = this.data.period
+    const params = {
+      start,
+      middle,
+      end,
+      needReferee,
+      firstShoot,
+      secondShoot,
+      selectedCourts,
+      _openid,
+      price,
+      useIntegral
+    }
     const res = await wx.cloud.callFunction({
       name: 'createCourtOrder',
       data: {
-        params: this.data.period
+        params: params
       }
     })
     console.log(res)

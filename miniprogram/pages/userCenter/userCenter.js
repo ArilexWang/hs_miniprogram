@@ -5,7 +5,7 @@ const db = wx.cloud.database()
 import {
   LastLoginKey
 } from '../../utils/const'
-import drawQrcode from 'weapp-qrcode-canvas-2d'
+import drawQrcode from 'weapp-qrcode'
 
 Page({
   /**
@@ -152,53 +152,46 @@ Page({
       },
     })
   },
-  qcCodeClick() {
+  async reloadUserInfo() {
+    if (!app.globalData.userInfo._id) {
+      return
+    }
+    wx.showLoading({
+      title: '更新中',
+    })
+    const getMember = await db.collection('members').where({
+      _openid: app.globalData.userInfo._openid
+    }).get()
+    const member = getMember.data[0]
+    app.globalData.userInfo = member
+    this.setData({
+      userInfo: member
+    })
+    wx.hideLoading({
+      success: (res) => {},
+    })
+  },
+  qrCodeClick() {
+    const code = {
+      type: 0,
+      id: app.globalData.userInfo._id
+    }
+    drawQrcode({
+      width: 230,
+      height: 230,
+      x: 10,
+      y: 10,
+      canvasId: 'myQrcode',
+      text: JSON.stringify(code)
+    })
     this.setData({
       showQRCode: true
     })
-    const query = wx.createSelectorQuery()
-    const that = this
-    query.select('#myQRCode')
-      .fields({
-        node: true,
-        size: true
-      })
-      .exec((res) => {
-        var canvas = res[0].node
-        // 调用方法drawQrcode生成二维码
-        drawQrcode({
-          canvas: canvas,
-          canvasId: 'myQRCode',
-          width: 300,
-          height: 300,
-          padding: 30,
-          background: '#ffffff',
-          foreground: '#000000',
-          text: app.globalData.userInfo._id,
-        })
-
-        // 获取临时路径（得到之后，想干嘛就干嘛了）
-        wx.canvasToTempFilePath({
-          canvasId: 'myQRCode',
-          canvas: canvas,
-          x: 0,
-          y: 0,
-          width: 300,
-          height: 300,
-          destWidth: 300,
-          destHeight: 300,
-          success(res) {
-            if (res.tempFilePath.length > 0) {
-              that.setData({
-                qrCodeImgUrl: res.tempFilePath
-              })
-            }
-          },
-          fail(res) {
-            console.error(res)
-          }
-        })
-      })
+  },
+  onHideMask() {
+    this.setData({
+      showQRCode: false
+    })
   },
   onClickOverlay() {
     this.setData({
@@ -208,6 +201,16 @@ Page({
   onCourtOrderClick() {
     wx.navigateTo({
       url: '../courtOrders/courtOrders',
+    })
+  },
+  onRechargeOrderClick() {
+    wx.navigateTo({
+      url: '../rechargeOrders/rechargeOrders'
+    })
+  },
+  onCashOrdersClick() {
+    wx.navigateTo({
+      url: '../cashOrders/cashOrders'
     })
   },
   onLogoutClick() {

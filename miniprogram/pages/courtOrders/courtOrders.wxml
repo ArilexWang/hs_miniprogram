@@ -1,3 +1,8 @@
+<van-overlay show="{{ showQRCode }}" bind:click="onHideMask">
+  <view class="wrapper">
+    <canvas class="wrapper" style=width:250px;height:250px;background-color:white" canvas-id="courtQRCode"></canvas>
+  </view>
+</van-overlay>
 <view class="main-color flex-column flex-align-center" style="min-height:100vh">
   <van-notice-bar style="width:100vw;" left-icon="volume-o" mode="closeable" 
     text="开场前三小时以上可以退款" />
@@ -38,7 +43,7 @@
       <view class="flex-column flex-align-center">
         <view class="highlight-color" id="{{index}}" wx:if="{{item.status === 0}}" style="margin-right:10px">未支付</view>
         <view class="highlight-color" id="{{index}}" wx:elif="{{item.status === 2}}" style="margin-right:10px">已退款</view>
-        <image wx:if="{{item.status === 1}}" src="../../src/qrcode.png" style="width:50px;margin:10px" mode="widthFix" bindtap="qcCodeClick"></image>
+        <image wx:if="{{item.status === 1}}" id="{{index}}" src="../../src/qrcode.png" style="width:50px;margin:10px" mode="widthFix" bindtap="qrCodeClick"></image>
         <view class="confirmBtn highlight-background" id="{{index}}" wx:if="{{item.status === 1}}"
           bindtap="onRefundClick">退款</view>
       </view>

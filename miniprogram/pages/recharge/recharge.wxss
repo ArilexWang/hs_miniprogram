@@ -1,0 +1,14 @@
+/* miniprogram/pages/recharge/recharge.wxss */
+
+.seperator{
+  width: 100vw;
+  height: 1px;
+  background-color: lightgray; 
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}

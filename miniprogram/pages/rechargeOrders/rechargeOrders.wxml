@@ -1,0 +1,24 @@
+<!--pages/rechargeOrders/rechargeOrders.wxml-->
+<view class="flex-column flex-align-center" style="min-height: 100vh; width: 100vw;">
+  <view class="flex-column" wx:for="{{orders}}" wx:key="index" style="width: 90vw;border: 1px rgb(156, 156, 156) solid; padding: 10px; margin-top: 5px;">
+    <view class="label">
+      <view>商品名称: {{item.name}}</view>
+      <view wx:if="{{item.status === 1}}" style="color: rgb(207, 36, 36);">交易成功</view>
+      <view wx:if="{{item.status === 0}}">未支付</view>
+      <view wx:if="{{item.status === 2}}" style="color: rgb(207, 36, 36);">已退款</view>
+    </view>
+    <view class="label">
+      <view>下单时间: {{item.format}}</view>
+    </view>
+    <view class="label">
+      <view>商品原价: ￥{{item.price}}.00</view>
+      <view wx:if="{{item.status === 1}}">支付金额: ￥{{item.actualPrice}}</view>
+    </view>
+    <view wx:if="{{item.status === 1}}" class="label">
+      <view wx:if="{{item.useIntegral}}">抵扣积分: {{item.costIntegral}}</view>
+      <view wx:if="{{item.affordIntegral > 0}}">赠送积分: {{item.affordIntegral}}</view>
+    </view>
+  </view>
+
+
+</view>

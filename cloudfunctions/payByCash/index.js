@@ -1,8 +1,12 @@
 // 云函数入口文件
-const { get } = require('http')
+const {
+  get
+} = require('http')
 const cloud = require('wx-server-sdk')
 
-cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV }) // 使用当前云环境
+cloud.init({
+  env: cloud.DYNAMIC_CURRENT_ENV
+}) // 使用当前云环境
 const db = cloud.database({
   throwOnNotFound: false,
 })
@@ -14,26 +18,36 @@ exports.main = async (event, context) => {
     case 0:
       collection = 'court_orders'
       break;
+    case 1:
+      collection = 'recharge_orders'
+      break;
     default:
       break;
   }
   if (collection.length === 0) {
-    return { errorMsg: '无对应类型订单' }
+    return {
+      errorMsg: '无对应类型订单'
+    }
   }
+  console.log('event', event)
   const transaction = await db.startTransaction()
   const orderTransaction = transaction.collection(collection)
   const memberTransaction = transaction.collection('members')
   const getOrder = await orderTransaction.doc(event.orderid).get()
-  console.log(getOrder)
+  console.log('获取订单信息',getOrder)
   if (getOrder.data._id.length === 0) {
-    return { errorMsg: '查询场地订单失败' }
+    return {
+      errorMsg: '查询订单失败'
+    }
   }
   const order = getOrder.data
   const getMember = await memberTransaction.where({
     _openid: event.openid
   }).get()
   if (getMember.data.length !== 1) {
-    return { errorMsg: '查询用户失败' }
+    return {
+      errorMsg: '查询用户失败'
+    }
   }
   const member = getMember.data[0]
   console.log(member)
@@ -49,30 +63,38 @@ exports.main = async (event, context) => {
     }
   }
   if (member.cash < actualPrice) { // 余额不足
-    return { errorMsg: '余额不足，支付失败' }
+    return {
+      errorMsg: '余额不足，支付失败'
+    }
   }
   console.log(member.cash, actualPrice)
   const updateMember = await memberTransaction.doc(member._id).update({
     data: {
       cash: member.cash - actualPrice,
-      intergal: member.integral - costIntegral
+      integral: member.integral - costIntegral
     }
   })
   console.log(updateMember)
-  if(updateMember.stats.updated !== 1) {
-    return { errorMsg: '更新用户余额失败' }
+  if (updateMember.stats.updated !== 1) {
+    return {
+      errorMsg: '更新用户余额失败'
+    }
   }
   const updateOrder = await orderTransaction.doc(order._id).update({
-    data:{
+    data: {
       status: 1,
       payBy: 0,
       costIntegral: costIntegral,
       actualPrice: actualPrice
     }
   })
-  if(updateOrder.stats.updated !== 1) {
-    return { errorMsg: '更新订单状态失败' }
+  if (updateOrder.stats.updated !== 1) {
+    return {
+      errorMsg: '更新订单状态失败'
+    }
   }
   await transaction.commit()
-  return { errorMsg: 'success' }
+  return {
+    errorMsg: 'success'
+  }
 }

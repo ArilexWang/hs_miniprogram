@@ -1,8 +1,10 @@
 {
   "dependencies": {
     "@vant/weapp": "^1.5.2",
+    "dateformat": "^3.0.3",
+    "lodash": "^4.17.21",
     "spa-custom-hooks": "^1.2.6",
-    "weapp-qrcode-canvas-2d": "^1.1.2",
-    "dateformat": "^3.0.3"
+    "weapp-qrcode": "^1.0.0",
+    "weapp-qrcode-canvas-2d": "^1.1.2"
   }
 }

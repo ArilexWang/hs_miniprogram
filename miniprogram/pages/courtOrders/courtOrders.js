@@ -2,6 +2,8 @@
 const app = getApp()
 const db = wx.cloud.database()
 var dateFormat = require('dateformat');
+import drawQrcode from 'weapp-qrcode'
+
 Page({
 
   /**
@@ -28,7 +30,14 @@ Page({
       _openid: app.globalData.userInfo._openid
     }).get()
     console.log(getOrders)
-    this.handleOrders(getOrders.data)
+    const orders = getOrders.data.map((item) => {
+      item.dateFormat = dateFormat(item.start, 'yyyy-mm-dd')
+      item.hourFormat = dateFormat(item.start, 'HH:MM') + ' - ' + dateFormat(item.end, 'HH:MM')
+      item.firstFormat = dateFormat(item.start, 'HH:MM') + ' - ' + dateFormat(item.middle, 'HH:MM')
+      item.lastFormat = dateFormat(item.middle, 'HH:MM') + ' - ' + dateFormat(item.end, 'HH:MM')
+      return item
+    })
+    this.handleOrders(orders)
     this.setData({
       courtOrders: this.data.validOrders
     })
@@ -116,7 +125,35 @@ Page({
       })
       return
     }
+    wx.showToast({
+      title: '退款成功',
+    })
     await this.reloadData()
+  },
+
+  qrCodeClick(e) {
+    console.log(this.data.courtOrders[e.currentTarget.id])
+    const order = this.data.courtOrders[e.currentTarget.id]
+    const code = {
+      type: 1,
+      id: order._id
+    }
+    drawQrcode({
+      width: 230,
+      height: 230,
+      x: 10,
+      y: 10,
+      canvasId: 'courtQRCode',
+      text: JSON.stringify(code)
+    })
+    this.setData({
+      showQRCode: true
+    })
+  },
+  onHideMask() {
+    this.setData({
+      showQRCode: false
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

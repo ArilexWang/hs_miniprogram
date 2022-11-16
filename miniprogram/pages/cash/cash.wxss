@@ -1,0 +1,9 @@
+/* pages/cash/cash.wxss */
+.cashIcon {
+  display: flex;
+  justify-content: center;
+  background-color: #d8313d;
+  padding: 6px;
+  width: 40px;
+  border-radius: 6px;
+}

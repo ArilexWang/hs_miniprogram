@@ -65,7 +65,7 @@
                 <checkbox value="1" disabled="{{!selectedPeriod.canOrderFirstShoot}}" />{{selectedPeriod.firstFormat}}
               </view>
               <view style="margin-left: 10px;">
-                <checkbox value="2" disabled="{{!selectedPeriod.canOrderFirstShoot}}" />{{selectedPeriod.lastFormat}}
+                <checkbox value="2" disabled="{{!selectedPeriod.canOrderSecondShoot}}" />{{selectedPeriod.lastFormat}}
               </view>
             </view>
             <view style="margin:5px">投篮机费用：180元/小时（仅室内场可用，可用时段为工作日全天和周末晚上）</view>

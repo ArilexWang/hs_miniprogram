@@ -187,6 +187,13 @@ page {
   flex-direction: row;
 }
 
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
 .flex-row-wrap {
   display: flex;
   flex-direction: row;

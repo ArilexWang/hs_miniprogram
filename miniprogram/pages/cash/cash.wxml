@@ -1,0 +1,40 @@
+<!--pages/rechargeOrders/rechargeOrders.wxml-->
+<view class="flex-column flex-align-center" style="min-height: 100vh; width: 100vw;">
+  <view wx:for="{{cash}}" wx:key="index" style="width: 90vw;border: 1px rgb(156, 156, 156) solid; margin-top: 5px;">
+    <view class="flex-row flex-align-center flex-content-between" style="margin: 20px" id="{{index}}" bindtap="onItemClick">
+        <view class="flex-row flex-align-center">
+          <view class="flex-row flex-align-center">
+            <view class="cashIcon">{{item.value}}</view>
+            <view style="margin-left:3px">充值卡</view>
+          </view>
+          <view wx:if="{{item.extra > 0}}" class="flex-row flex-align-center" style="margin-left: 20px">
+            <view class="highlight-color" style="margin-right:5px">送</view>
+            <view class="cashIcon">
+              {{item.extra}}
+            </view>
+          </view>
+        </view>
+        <view class="flex-row flex-align-end">
+          <view class="highlight-color" style="padding-bottom:2px;margin-right:2px">RMB:</view>
+          <view style="font-size:24px;letter-spacing:-2px">{{item.value}}</view>
+        </view>
+      </view>
+  </view>
+</view>
+
+<van-dialog use-slot title="是否确认充值" show="{{ showDialog }}" show-cancel-button bind:confirm="onConfirm" bind:close="onClose" >
+  <view class="flex-column" >
+    <view wx:if="{{userInfo.integral >= 500}}" style="margin: 5px">
+      <checkbox-group class="flex flex-column flex-content-center" bindchange="checkBoxChanged">
+        <view style="margin: 5px;">
+          <checkbox value="0" />是否使用{{userInfo.integral}}积分抵扣
+        </view>
+      </checkbox-group>
+    </view>
+    <view class="flex-row flex-content-arround">
+      <view style="margin: 5px">原价: ￥{{selectedCash.value}}.00</view>
+      <view wx:if="{{useIntegral}}" style="margin: 5px">预计还需支付 ￥{{selectedCash.value - userInfo.integral / 100 >= 0 ? selectedCash.value - userInfo.integral / 100 : 0 }}.00</view>
+      <view wx:else style="margin: 5px">预计还需支付 ￥{{selectedCash.value}}.00</view>
+    </view>  
+  </view>
+</van-dialog>

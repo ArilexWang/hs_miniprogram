@@ -1,14 +1,21 @@
 {
   "pages": [
+    "pages/main/main",
+    "pages/rechargeOrders/rechargeOrders",
+    "pages/recharge/recharge",
     "pages/userCenter/userCenter",
     "pages/courtOrders/courtOrders",
     "pages/stadium/stadium",
-    "pages/courtOrder/courtOrder"
+    "pages/courtOrder/courtOrder",
+    "pages/cash/cash",
+    "pages/cashOrders/cashOrders"
   ],
-  
   "tabBar": {
-
     "list": [
+      {
+        "pagePath": "pages/main/main",
+        "text": "主页"
+      },
       {
         "pagePath": "pages/stadium/stadium",
         "text": "场馆"
@@ -28,4 +35,3 @@
   },
   "sitemapLocation": "sitemap.json"
 }
-

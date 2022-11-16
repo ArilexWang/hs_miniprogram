@@ -10,7 +10,7 @@ const db = cloud.database({
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
-  const courts = event.courts
+  const courts = event.selectedCourts
   var totalCost = 0;
   const getOriginCourts = await db.collection('courts').get()
   const originCourts = getOriginCourts.data
@@ -66,6 +66,12 @@ exports.main = async (event, context) => {
     console.log(element)
     totalCost += element.price
   })
+  if (event.firstShoot) {
+    totalCost += 180
+  }
+  if (event.secondShoot) {
+    totalCost += 180
+  }
   console.log(totalCost)
   return {
     price: totalCost,

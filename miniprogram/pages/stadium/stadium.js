@@ -9,7 +9,7 @@ Page({
    */
   data: {
     options: [],
-    selectedIndex: 4,
+    selectedIndex: 3,
     banners: ['https://huiwan-1304067511.cos.ap-guangzhou.myqcloud.com/IMG_0437.JPG ', '	https://huiwan-1304067511.cos.ap-guangzhou.myqcloud.com/IMG_0436.JPG'],
   },
 
@@ -214,9 +214,14 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow() {
+  async onShow() {
+    console.log("onShow")
     this.setData({
-      selectedPeriod: null
+      selectedPeriod: null,
+    })
+    await this.reloadData()
+    wx.stopPullDownRefresh({
+      success: (res) => {},
     })
   },
 
@@ -237,6 +242,9 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   async onPullDownRefresh() {
+    this.setData({
+      selectedPeriod: null
+    })
     await this.reloadData()
     wx.stopPullDownRefresh({
       success: (res) => {},

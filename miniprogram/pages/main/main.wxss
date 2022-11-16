@@ -1,0 +1,25 @@
+/* miniprogram/pages/main/main.wxss */
+.card{
+  color: black;
+  width: 100vw;
+}
+
+.item{
+  width: 45vw;
+  height: 160px;
+  margin: 10px;
+  /* background-color: blue; */
+  border: 1px solid rgb(156, 156, 156);
+}
+
+.seperator{
+  width: 100vw;
+  height: 3px;
+  background-color: #343640;
+}
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}

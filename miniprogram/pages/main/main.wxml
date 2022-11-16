@@ -1,0 +1,93 @@
+<!--miniprogram/pages/main/main.wxml-->
+<van-overlay show="{{ showQRCode }}" bind:click="onHideMask">
+  <view class="wrapper">
+    <canvas class="wrapper" style=width:250px;height:250px;background-color:white" canvas-id="mainQRCode"></canvas>
+  </view>
+</van-overlay>
+<view class="main-color flex-column flex-align-center" style="min-height:100vh;max-width: 100vw">
+  <view class="main-content">
+    <view class="flex-row flex-align-center flex-content-arround" style="width: 90vw;">
+      <view style="color:black;margin:8px">荟晟篮球中心</view>
+      <view wx:if="{{userInfo._id}}" class="flex-row">
+        <image style="width: 60px;height:60px;border-radius:30px;margin:5px;" mode="aspectFit" src="{{userInfo.avatarUrl}}"></image>
+        <image src="../../src/qrcode.png" style="width:50px;margin:10px" mode="widthFix" bindtap="qrCodeClick"></image>
+      </view>
+
+    </view>
+    <view class="seperate-line"></view>
+    <view class="flex-column flex-align-start">
+      <view class="flex-row flex-align-center" style="color:black">
+        <view class="flex-column item" bindtap="onRechargeClick">
+          <view style="margin: 20px 20px 15px 20px">
+            <image src="../../src/main_ticket.png" style="width:100px;margin-bottom:10px" mode="widthFix"></image>
+            <view class="flex-row flex-content-between flex-align-center">
+              <view class="flex-column">
+                <view>散客</view>
+                <view style="font-size:10px">TICKET</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="flex-column item" bindtap="onCourtClick">
+          <view style="margin: 20px 20px 15px 20px">
+            <image src="../../src/main_court.png" style="width:100px;margin-bottom:10px" mode="widthFix"></image>
+            <view class="flex-row flex-content-between flex-align-center">
+              <view class="flex-column">
+                <view>包场</view>
+                <view style="font-size:10px">COURT RESERVATION</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="flex-row flex-align-start" style="color:black">
+        <view class="flex-column item" bindtap="onCashClick">
+          <view style="margin: 20px 20px 15px 20px">
+            <image src="../../src/cash1.png" style="width:100px;margin-top: -15px" mode="widthFix"></image>
+            <view class="flex-row flex-content-between flex-align-center">
+              <view class="flex-column">
+                <view>充值</view>
+                <view style="font-size:10px">RECHARGE</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="flex-row flex-align-center" style="color:black;margin-top:30px" bindtap="onPhoneClick">
+      <view style="margin-right: 10px;">联系客服</view>
+      <view class="flex-row flex-align-center">
+        <image src="../../src/phone-call.png" style="width:25px" mode="widthFix"></image>
+      </view>
+    </view>
+  </view>
+  <van-overlay show="{{ showOverlay }}" bind:click="onHideMask">
+    <view class="wrapper">
+      <canvas class="wrapper" style="width:250px;height:250px;background-color:white" canvas-id="myQrcode"></canvas>
+    </view>
+  </van-overlay>
+
+  <view class="foot main-color">
+    <text>请您仔细阅读并了解我们的</text>
+    <text bindtap="onMsgClick" class="highlight-color">《订场须知》</text>
+    <text>，当您继续使用小程序，代表您同意并接受该说明。</text>
+  </view>
+  <van-dialog id="van-dialog" />
+  <van-overlay show="{{ showOverlay2 }}" bind:click="onHideMask">
+    <view class="wrapper">
+      <scroll-view scroll-y class="main-color" style="width:300px;height: 400px;">
+        <view class="flex-column flex-align-stretch flex-content-between" style="min-height: 200px;margin:20px; color: white">
+          <text>① 场地开放时间 冬季9：30-22：30，夏季9：00-22：30（如遇法定节假日或者大型活动，另行通知。</text>
+          <text>② 场地预定后，可在开场前1小时以上进行退款操作；开场前1小时内不予退款。</text>
+          <text>③ 每半场限制人数为40人，所有人员凭借二维码入场。二维码可在“首页”或者“我的-包场订单”查询。</text>
+          <text>④ 服从管理，遵守场内的各项规定，自觉听从工作人员的协调管理。</text>
+          <text>⑤ 文明运动，不在场内更换衣服，赤膊等不文明行为，如有发现，将通过广播通报批评。</text>
+          <text>⑥ 讲究卫生，请在场内吸烟区吸烟；禁止在场内随地吐痰；嚼食口香糖后，请包裹在纸巾内随手扔进垃圾桶；女生禁止穿高跟鞋进入场内；含酒精及进食快餐；饮用后的水瓶，请自觉扔入垃圾桶。</text>
+          <text>⑦ 爱护公物，请您爱护场内设施，不随意挪动场内设施，禁止乱涂乱画，损坏围网等行为，如有损坏，照价赔偿。</text>
+          <text>⑧ 入场活动人员应科学锻炼，合理健身，注意人身以及财产安全，禁止斗殴</text>
+        </view>
+      </scroll-view>
+    </view>
+  </van-overlay>
+</view>

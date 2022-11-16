@@ -1,0 +1,61 @@
+<!--miniprogram/pages/recharge/recharge.wxml-->
+<view class="main-color" style="color:black;min-height:100vh">
+  <view class="main-content">
+    <view wx:for="{{recharges}}" wx:key="index" style="width:100vw">
+      <view class="flex-row flex-align-center" id="{{index}}" bindtap="onItemClick">
+        <view style="margin-right:2px;margin-left:10px;flex:0 1 130px">
+          <image src="../../src/time-ticket.png" style="width:120px;border:1px solid #d46ccd" mode="widthFix"></image>
+        </view>
+        <view class="flex-column" style="flex:1 1 150px;margin:8px">
+          <view style="font-size:20px">{{item.name}}</view>
+          <view style="font-size:14px">可用场地：指定散场</view>
+          <view style="font-size:14px">适用时段：10:00-22:00</view>
+          <view class="flex-row flex-content-between flex-align-center">
+            <view style="font-size:14px">时长：不限时</view>
+            <view class="flex-row flex-align-end">
+              <view class="highlight-color" style="padding-bottom:2px;margin-right:2px">RMB:</view>
+              <view style="font-size:24px;letter-spacing:-2px">{{item.price + ".00"}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="seperator"></view>
+    </view>
+  </view>
+  <view wx:if="{{recharges.length}}" class="foot">
+    <text>请您仔细阅读并了解我们的</text>
+    <text bindtap="onMsgClick" class="highlight-color">《野球卡消费须知》</text>
+    <text>，当您继续使用小程序，代表您同意并接受该说明</text>
+  </view>
+
+  <van-overlay show="{{ showOverlay }}" bind:click="onHideMask">
+    <view class="wrapper">
+      <view class="main-color" style="width:300px;height: 400px;">
+        <view class="flex-column flex-align-stretch flex-content-between" style="height: 300px;margin:20px">
+          <text>① 野球次卡一旦购买，不予退款。</text>
+          <text>② 野球次卡会在每次进入场馆时扣除次数；如单次卡仅可入场一次，离场后不可再入场。</text>
+          <text>③ 野球次卡仅供本人使用，严禁一卡多用。</text>
+          <text>④ 购买后可在“我的卡包”中查看剩余次数（若充值后无变化，请在“我的卡包”中下拉刷新），并凭借“我的卡包”中提供二维码入场。</text>
+        </view>
+      </view>
+    </view>
+  </van-overlay>
+</view>
+
+<van-dialog use-slot title="是否确认购买散客卡" show="{{ showDialog }}" show-cancel-button bind:confirm="onConfirm" bind:close="onClose" >
+  <view class="flex-column" >
+    <view wx:if="{{userInfo.integral >= 500}}" style="margin: 5px">
+      <checkbox-group class="flex flex-column flex-content-center" bindchange="checkBoxChanged">
+        <view style="margin: 5px;">
+          <checkbox value="0" />是否使用{{userInfo.integral}}积分抵扣
+        </view>
+      </checkbox-group>
+    </view>
+    <view class="flex-row flex-content-arround">
+      <view style="margin: 5px">原价: ￥{{selectedRecharge.price}}.00</view>
+      <view wx:if="{{useIntegral}}" style="margin: 5px">预计还需支付 ￥{{selectedRecharge.price - userInfo.integral / 100 >= 0 ? selectedRecharge.price - userInfo.integral / 100 : 0 }}.00</view>
+      <view wx:else style="margin: 5px">预计还需支付 ￥{{selectedRecharge.price}}.00</view>
+    </view>  
+  </view>
+
+</van-dialog>
