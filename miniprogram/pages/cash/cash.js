@@ -50,6 +50,7 @@ Page({
         title: '请先登录',
         icon: 'error'
       })
+      return
     }
     this.setData({
       selectedCash: this.data.cash[e.currentTarget.id]

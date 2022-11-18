@@ -34,6 +34,11 @@ Page({
       url: '../cash/cash',
     })
   },
+  onCourtClick() {
+    wx.switchTab({
+      url: '../stadium/stadium',
+    })
+  },
   qrCodeClick() {
     const code = {
       type: 0,

@@ -38,6 +38,7 @@ Page({
         title: '请先登录',
         icon: 'error'
       })
+      return
     }
     this.setData({
       selectedRecharge: this.data.recharges[e.currentTarget.id]

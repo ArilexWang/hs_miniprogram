@@ -11,7 +11,7 @@
     <van-dropdown-menu style="width:100vw;">
       <van-dropdown-item value="{{ selectedIndex }}" options="{{ options }}" bind:change="onDayItemClick" />
     </van-dropdown-menu>
-    <view class="flex-row period" wx:for="{{periods}}" wx:key="index">
+    <view class="flex-row period" wx:for="{{periods}}" wx:key="index" style="margin-top: 10px;">
       <view class="item">{{item.hourFormat}}</view>
       <view class="item" wx:if="{{item.avaliable == 1}}"> 可预订 </view>
       <view class="item" style="color:#5a5c67" wx:elif="{{item.avaliable == 0}}"> 不可预订 </view>

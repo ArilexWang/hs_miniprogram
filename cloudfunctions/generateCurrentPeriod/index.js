@@ -76,11 +76,15 @@ exports.main = async (event, context) => {
     return court
   })
   currentPeriod.courts = courts
-  currentPeriod.avaliable = 0
+  currentPeriod.avaliable = 2
   courts.forEach(element => {
     if (element.status === 1) {
       currentPeriod.avaliable = 1
     }
   });
+  // 若当前时间已经超过结束时间，则无法预定
+  if(currentPeriod.end < new Date().getTime()) {
+    currentPeriod.avaliable = 0
+  }
   return currentPeriod
 }

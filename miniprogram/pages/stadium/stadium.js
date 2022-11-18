@@ -9,7 +9,7 @@ Page({
    */
   data: {
     options: [],
-    selectedIndex: 3,
+    selectedIndex: 0,
     banners: ['https://huiwan-1304067511.cos.ap-guangzhou.myqcloud.com/IMG_0437.JPG ', '	https://huiwan-1304067511.cos.ap-guangzhou.myqcloud.com/IMG_0436.JPG'],
   },
 
@@ -98,10 +98,10 @@ Page({
         },
       })
       const period = res.result
-      period.format = dateFormat(period.start, 'yyyy-mm-dd hh:MM') + ' - ' + dateFormat(period.end, 'hh:MM')
-      period.hourFormat = dateFormat(period.start, 'hh:MM') + ' - ' + dateFormat(period.end, 'hh:MM')
-      period.firstFormat = dateFormat(period.start, 'hh:MM') + '-' + dateFormat(period.middle, 'hh:MM')
-      period.lastFormat = dateFormat(period.middle, 'hh:MM') + '-' + dateFormat(period.end, 'hh:MM')
+      period.format = dateFormat(period.start, 'yyyy-mm-dd HH:MM') + ' - ' + dateFormat(period.end, 'HH:MM')
+      period.hourFormat = dateFormat(period.start, 'HH:MM') + ' - ' + dateFormat(period.end, 'HH:MM')
+      period.firstFormat = dateFormat(period.start, 'HH:MM') + '-' + dateFormat(period.middle, 'HH:MM')
+      period.lastFormat = dateFormat(period.middle, 'HH:MM') + '-' + dateFormat(period.end, 'HH:MM')
       periods.push(period)
     }
     return periods
@@ -110,6 +110,10 @@ Page({
   async onSelectedClicked(e) {
     if (app.globalData.userInfo._id.length === 0) {
       console.log("未登录")
+      wx.showToast({
+        title: '请先登录',
+        icon: 'error'
+      })
       return
     }
     const period = this.data.periods[e.currentTarget.id]
