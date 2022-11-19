@@ -67,10 +67,10 @@ exports.main = async (event, context) => {
     totalCost += element.price
   })
   if (event.firstShoot) {
-    totalCost += 180
+    totalCost += 108
   }
   if (event.secondShoot) {
-    totalCost += 180
+    totalCost += 108
   }
   console.log(totalCost)
   return {

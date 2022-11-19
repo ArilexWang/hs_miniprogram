@@ -57,6 +57,7 @@ Page({
         if (current < element.end) {
           validOrders.push(element)
         } else {
+          element.status = 3
           invalidOrders.push(element)
         }
       }

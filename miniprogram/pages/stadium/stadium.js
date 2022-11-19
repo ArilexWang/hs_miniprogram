@@ -36,7 +36,7 @@ Page({
     })
     const selectedDate = this.data.options[this.data.selectedIndex].date
     const periods = await this.getPeriods(selectedDate)
-    console.log(periods)
+    console.log('aaaaa', periods)
     wx.hideLoading({
       success: (res) => {},
     })
@@ -117,17 +117,23 @@ Page({
       return
     }
     const period = this.data.periods[e.currentTarget.id]
+    console.log('bbbbbb', period)
+    if (period.avaliable !== 1) {
+      wx.showToast({
+        title: '不可预订',
+        icon:'error'
+      })
+      return
+    }
     period.courts = period.courts.map((item) => {
       item.imageUrl = '../../src/' + item.name + '-' + item.status + '.jpg'
       return item
     })
-    console.log(period)
     this.setData({
       selectedPeriod: period
     })
   },
   checkBoxChanged(e) {
-    console.log(e)
     const values = e.detail.value
     const period = this.data.selectedPeriod
     period.needReferee = values.includes("0")
@@ -164,6 +170,7 @@ Page({
     }
   },
   onCancelClick() {
+    console.log('onCancelClick')
     this.setData({
       selectedPeriod: null
     })
@@ -185,13 +192,21 @@ Page({
       return
     }
     if (period.firstShoot || period.secondShoot) {
-      var valid = false
-      period.courts.forEach(element => {
-        if (element.status === 2 && (element._id === 1 || element._id === 2)) {
-          valid = true
+      var validCourts = false
+      period.courts.forEach(court => {
+        if (court.status === 2 && (court._id === 1 || court._id === 2)) {
+          validCourts = true
         }
       });
-      if (!valid) {
+      var validDate = true
+      const start = new Date(period.start)
+      if (start.getDay() === 0 || start.getDay() === 6) { // 周末
+        const startHour = start.getHours()
+        if (startHour < 18) {
+          validDate = false
+        }
+      }
+      if (!validCourts || !validDate) {
         wx.showToast({
           title: '投篮机不可用',
           icon: "error"

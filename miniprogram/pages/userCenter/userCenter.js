@@ -18,6 +18,7 @@ Page({
     showQRCode: false,
     phoneNum: '',
     switchChecked: false,
+    userInfo: {},
   },
 
   /**
@@ -88,6 +89,7 @@ Page({
       })
       return
     }
+    console.log('点击登录',app.globalData)
     if (app.globalData._openid.length === 0) {
       console.log("登录失败，openid为空")
       return
@@ -101,6 +103,10 @@ Page({
     const member = getMember.data[0]
     wx.setStorageSync(LastLoginKey, new Date())
     app.globalData.userInfo = member
+    this.setData({
+      hasLogin: true,
+      userInfo: app.globalData.userInfo
+    })
   },
   async onRegisterClick() {
     if (this.data.phoneNum.length === 0) {
