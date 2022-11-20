@@ -238,10 +238,6 @@ Page({
     this.setData({
       selectedPeriod: null,
     })
-    await this.reloadData()
-    wx.stopPullDownRefresh({
-      success: (res) => {},
-    })
   },
 
   /**

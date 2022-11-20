@@ -186,6 +186,10 @@ Page({
     }
     console.log("余额不足，调用微信支付")
     // 调用微信支付
+    wx.showToast({
+      title: '余额不足',
+      icon: 'error'
+    })
   },
   async onConfirmClick() {
     const that = this

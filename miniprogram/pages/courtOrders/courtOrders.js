@@ -98,7 +98,15 @@ Page({
   async onRefundClick(e) {
     const order = this.data.courtOrders[e.currentTarget.id]
     // 1， 判断当前时间是否违规
-    const current = new Date()
+    const current = new Date().getTime()
+    console.log(current, order.start)
+    if (current - order.start < 8 * 60 * 60 * 1000) { // 8小时前才能
+      wx.showToast({
+        title: '距离开场已不足8小时，不能完成退款',
+        icon: 'none'
+      })
+      return
+    }
     // 2，调用退款接口
     const that = this
     wx.showModal({

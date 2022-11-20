@@ -5,7 +5,7 @@
 </van-overlay>
 <view class="main-color flex-column flex-align-center" style="min-height:100vh">
   <van-notice-bar style="width:100vw;" left-icon="volume-o" mode="closeable" 
-    text="开场前三小时以上可以退款" />
+    text="开场前8小时以上可以操作退款" />
   <van-tabs active="{{ activeTab }}" bind:change="onTabChange" style="width:100vw;margin-bottom:10px">
     <van-tab title="使用中"></van-tab>
     <van-tab title="已退款"></van-tab>

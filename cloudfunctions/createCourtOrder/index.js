@@ -115,7 +115,7 @@ isValidOrder = (order) => {
     return true
   } else if (order.status === 0) { // 1.2 订单未支付
     const current = new Date().getTime()
-    if (current - order.created < 300000) { // 还在生效中
+    if (current - order.created < 60000) { // 还在生效中
       return true
     } else {
       console.log("距离订单创建已过去：", current - order.created)
