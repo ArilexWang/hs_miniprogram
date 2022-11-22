@@ -62,15 +62,17 @@ exports.main = async (event, context) => {
       })
     }
   }
+  const getShoot = await db.collection('shoot').limit(1).get()
+  const shootPrice = getShoot.data[0].price
   tempCourts.forEach(element => {
     console.log(element)
     totalCost += element.price
   })
   if (event.firstShoot) {
-    totalCost += 108
+    totalCost += shootPrice
   }
   if (event.secondShoot) {
-    totalCost += 108
+    totalCost += shootPrice
   }
   console.log(totalCost)
   return {

@@ -25,6 +25,12 @@ Page({
     this.setData({
       options: validDays
     })
+    const getShoot = await db.collection('shoot').limit(1).get()
+    const shootPrice = getShoot.data[0].price
+    this.setData({
+      shootPrice: shootPrice
+    })
+    console.log(getShoot)
     wx.showLoading({
       title: '加载中',
     })
