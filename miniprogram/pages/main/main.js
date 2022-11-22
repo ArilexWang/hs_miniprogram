@@ -29,7 +29,7 @@ Page({
       url: '../recharge/recharge',
     })
   },
-  onCashClick() {
+  async onCashClick() {
     wx.navigateTo({
       url: '../cash/cash',
     })
