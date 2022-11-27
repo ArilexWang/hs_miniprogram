@@ -57,7 +57,7 @@
         <text>{{userInfo.phoneNum}}</text>
       </view>
       <view class="flex-row flex flex-align-center">
-        <view bindtap="reloadUserInfo">更新按钮</view>
+        <view bindtap="reloadUserInfo">更新</view>
         <image src="../../src/qrcode.png" style="width:50px;margin:10px" mode="widthFix" bindtap="qrCodeClick"></image>
       </view>
       

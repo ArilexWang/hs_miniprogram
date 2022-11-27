@@ -4,6 +4,9 @@ import {
   LastLoginKey
 } from './utils/const'
 
+const ENV = 'test-7ggypkpn0dd471ba' // 正式环境
+// const ENV = 'cloudbase-baas-6giq7e77eb05e71c' // 测试环境
+
 let globalData = {
   // 是否已拿到token
   _openid: '',
@@ -15,7 +18,7 @@ let globalData = {
     avatarUrl: '',
   },
   hasRegister: false,
-  env: 'test-7ggypkpn0dd471ba'
+  env: ENV
 }
 CustomHook.install({
   'GetOpenid': {
@@ -51,7 +54,7 @@ App({
       console.error('请使用 2.2.3 或以上的基础库以使用云能力');
     } else {
       wx.cloud.init({
-        env: 'test-7ggypkpn0dd471ba',
+        env: ENV,
         traceUser: true,
       });
     }

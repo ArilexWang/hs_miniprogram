@@ -54,7 +54,7 @@
     <view class="flex flex-column flex-align-center flex-content-center" style="width: 100vw;">
       <checkbox-group class="flex flex-column flex-content-center" bindchange="checkBoxChanged">
         <view style="margin: 5px;margin-bottom: 10px;">
-          <checkbox value="0" checked="{{selectedPeriod.needReferee}}" />需要裁判（120元/场，线下支付）
+          <checkbox value="0" checked="{{selectedPeriod.needReferee}}" />需要裁判（120元/场）
         </view>
 
         <view style="width: 95vw; border: 1px rgb(163, 163, 163) solid;">

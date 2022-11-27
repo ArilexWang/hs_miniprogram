@@ -74,6 +74,9 @@ exports.main = async (event, context) => {
   if (event.secondShoot) {
     totalCost += shootPrice
   }
+  if (event.needReferee) {
+    totalCost += 120
+  }
   console.log(totalCost)
   return {
     price: totalCost,

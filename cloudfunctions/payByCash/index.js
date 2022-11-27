@@ -75,8 +75,9 @@ exports.main = async (event, context) => {
     }
   })
   console.log(updateMember)
-  if (updateMember.stats.updated !== 1) {
+  if (updateMember.stats.updated !== 1 && updateMember.stats.updated !== 0) {
     return {
+      msg: updateMember,
       errorMsg: '更新用户余额失败'
     }
   }
