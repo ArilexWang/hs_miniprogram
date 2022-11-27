@@ -19,7 +19,7 @@
       <view class="flex-row flex-align-center" style="color:black">
         <view class="flex-column item" bindtap="onRechargeClick">
           <view style="margin: 20px 20px 15px 20px">
-            <image src="../../src/main_ticket.png" style="width:100px;margin-bottom:10px" mode="widthFix"></image>
+            <image src="../../src/main_ticket.jpeg" style="width:50px;margin-bottom:10px" mode="widthFix"></image>
             <view class="flex-row flex-content-between flex-align-center">
               <view class="flex-column">
                 <view>散客</view>
@@ -30,7 +30,7 @@
         </view>
         <view class="flex-column item" bindtap="onCourtClick">
           <view style="margin: 20px 20px 15px 20px">
-            <image src="../../src/main_court.png" style="width:100px;margin-bottom:10px" mode="widthFix"></image>
+            <image src="../../src/main_court.jpeg" style="width:50px;margin-bottom:10px" mode="widthFix"></image>
             <view class="flex-row flex-content-between flex-align-center">
               <view class="flex-column">
                 <view>包场</view>
@@ -43,7 +43,7 @@
       <view class="flex-row flex-align-start" style="color:black">
         <view class="flex-column item" bindtap="onCashClick">
           <view style="margin: 20px 20px 15px 20px">
-            <image src="../../src/cash1.png" style="width:100px;margin-top: -15px" mode="widthFix"></image>
+            <image src="../../src/main_cash.jpeg" style="width:70px;margin-top: -15px" mode="widthFix"></image>
             <view class="flex-row flex-content-between flex-align-center">
               <view class="flex-column">
                 <view>充值</view>

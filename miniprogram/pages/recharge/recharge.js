@@ -110,12 +110,39 @@ Page({
         })
       }
     } else {
-      // 余额支付失败
+      // 余额支付失败, 使用微信支付
+      console.log('调用微信支付')
+      wx.hideLoading({
+        success: (res) => {},
+      })
+      await this.payByWechat(newOrder)
+    }
+  },
+  async payByWechat(order) {
+    console.log(order)
+    const res = await wx.cloud.callFunction({
+      name: 'unifiedOrder',
+      data: {
+        orderid: order._id,
+        orderType: 1,
+      }
+    })
+    console.log(res)
+    if (res.result.errMsg !== 'success') {
       wx.showToast({
-        title: '余额不足',
-        icon: 'error'
+        title: '支付失败，请联系客服',
       })
     }
+    const payment = res.result.res.payment
+    wx.requestPayment({
+      ...payment,
+      success (res) {
+        console.log('支付成功', res)
+      },
+      fail(err) {
+        console.log('支付失败',err)
+      }
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
