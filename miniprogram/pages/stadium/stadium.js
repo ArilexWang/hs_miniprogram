@@ -10,7 +10,7 @@ Page({
   data: {
     options: [],
     selectedIndex: 0,
-    banners: ['https://huiwan-1304067511.cos.ap-guangzhou.myqcloud.com/IMG_0437.JPG ', '	https://huiwan-1304067511.cos.ap-guangzhou.myqcloud.com/IMG_0436.JPG'],
+    banners: ['cloud://test-7ggypkpn0dd471ba.7465-test-7ggypkpn0dd471ba-1314769302/banners/WechatIMG254.jpeg','cloud://test-7ggypkpn0dd471ba.7465-test-7ggypkpn0dd471ba-1314769302/banners/WechatIMG253.jpeg', 'cloud://test-7ggypkpn0dd471ba.7465-test-7ggypkpn0dd471ba-1314769302/banners/WechatIMG249.jpeg'],
   },
 
   /**
