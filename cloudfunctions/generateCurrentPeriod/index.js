@@ -44,11 +44,8 @@ exports.main = async (event, context) => {
       console.log("已退款订单")
       return
     }
-    if (element.status === 0 && currentTimestamp - element.created > 300000) {
-      return // 无效订单
-    }
-    if (element === 1 || (element.status === 0 && currentTimestamp - element.created < 300000)) {
-      return // 无效订单
+    if (element.status === 0 && currentTimestamp - element.created > 1000 * 60 * 5) {
+      return // 未支付，且过去5分钟，无效订单
     }
     console.log('element', element)
     existCourts = existCourts.concat(element.selectedCourts)

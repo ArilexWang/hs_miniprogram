@@ -29,6 +29,7 @@ exports.main = async (event, context) => {
     default:
       break;
   }
+  console.log("订单类型：" + collection)
   const getOrder = await db.collection(collection).doc(event.orderid).get()
   console.log(getOrder)
   if (!getOrder.data) {
@@ -79,7 +80,7 @@ exports.main = async (event, context) => {
     "nonceStr": Math.random().toString(32),
     "body": "荟晟篮球中心-小程序",
     "outTradeNo": order._id,
-    "totalFee": wxContext.ENV === 'cloudbase-baas-6giq7e77eb05e71c' ? 1 : actualPrice,
+    "totalFee": wxContext.ENV === 'cloudbase-baas-6giq7e77eb05e71c' ? 1 : actualPrice * 100,
     "spbillCreateIp": ip,
     "tradeType": "JSAPI",
     "timeStart": dateFormat(new Date(), "yyyyMMddHHmmss"),

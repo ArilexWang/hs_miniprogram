@@ -18,7 +18,7 @@ exports.main = async (event, context) => {
     collection = 'court_orders'
   } else if(event.attach === '1') {
     collection = 'recharge_orders'
-  } else if(event.arrach === '2') {
+  } else if(event.attach === '2') {
     collection = 'cash_orders'
   }
   const orderId = event.outTradeNo
@@ -39,12 +39,42 @@ exports.main = async (event, context) => {
         errmsg: '更新用户信息失败,' + JSON.stringify(updateMember)
       }
     }
+  } else if(collection === 'cash_orders') {
+    const updateMember = await db.collection('members').where({
+      _openid: order._openid
+    }).update({
+      data: {
+        integral: db.command.inc(0 - order.costIntegral + parseInt(order.actualPrice)),
+        cash: db.command.inc(order.value + order.extra)
+      }
+    })
+    if (updateMember.stats.updated !== 1 && updateMember.stats.updated !== 0) {
+      return {
+        errcode: 0,
+        errmsg: '更新用户信息失败,' + JSON.stringify(updateMember)
+      }
+    }
+  } else if(collection === 'court_orders') {
+    const updateMember = await db.collection('members').where({
+      _openid: order._openid
+    }).update({
+      data: {
+        integral: db.command.inc(0 - order.costIntegral + parseInt(order.actualPrice)),
+      }
+    })
+    if (updateMember.stats.updated !== 1 && updateMember.stats.updated !== 0) {
+      return {
+        errcode: 0,
+        errmsg: '更新用户信息失败,' + JSON.stringify(updateMember)
+      }
+    }
   }
   
   const updateOrder = await db.collection(collection).doc(order._id).update({
     data: {
       transactionId: event.transactionId,
       status: 1,
+      totalFee: event.totalFee
     }
   })
   if (updateOrder.stats.updated !== 1 && updateOrder.stats.updated !== 0) {

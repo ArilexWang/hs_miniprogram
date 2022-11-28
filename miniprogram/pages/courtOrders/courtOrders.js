@@ -121,6 +121,9 @@ Page({
     })
   },
   async confirmRefund(order) {
+    wx.showLoading({
+      title: '退款中',
+    })
     const res = await wx.cloud.callFunction({
       name: 'refundCourtOrder',
       data: {
@@ -129,11 +132,26 @@ Page({
     })
     console.log(res)
     if (res.result.errorMsg !== 'success') {
-      wx.showToast({
-        title: '退款失败，请联系客服',
+      wx.hideLoading({
+        success: (res) => {},
+      })
+      wx.showModal({
+        title: '提示',
+        content: res.result.errorMsg,
+        showCancel: false,
+        success(res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
       })
       return
     }
+    wx.hideLoading({
+      success: (res) => {},
+    })
     wx.showToast({
       title: '退款成功',
     })

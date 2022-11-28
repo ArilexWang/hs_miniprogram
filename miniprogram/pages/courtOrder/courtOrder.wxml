@@ -1,6 +1,6 @@
 <!--miniprogram/pages/courtOrder/courtOrder.wxml-->
 <view class="container main-color">
-  <view style="width: 90vw;margin: 20px;">确认预约后，优先扣除账户余额进行支付。使用微信支付需在5分钟内完成付款，否则订单将失效；若微信支付失败，场地会被锁定5分钟，请5分钟后再试。</view>
+  <view style="width: 90vw;margin: 20px;">确认预约后，优先扣除账户余额进行支付。使用微信支付需在5分钟内完成付款，否则订单将失效；若微信支付失败或取消支付，场地会被锁定5分钟，请5分钟后再试。</view>
   <view class="seperate-line"></view>
   <view class="flex flex-column flex-content-arround">
     <view class="flex-row flex-content-between item">
@@ -42,7 +42,7 @@
     </view>
     <view class="flex-row flex-content-between item">
       <view>预计需支付</view>
-      <view style="font-size: 20px;color: red;">￥{{period.actualPrice}}.00</view>
+      <view style="font-size: 20px;color: red;">￥{{period.actualPrice}}</view>
     </view>
     <view class="flex-row flex-content-between item">
       <view style="font-size: 14px;">注意：如您希望取消预定，需在开场8小时前操作退款。</view>

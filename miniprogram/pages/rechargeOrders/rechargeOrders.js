@@ -21,6 +21,7 @@ Page({
   async onLoadLogin() {
     const getOrders = await db.collection('recharge_orders').where({
       _openid: app.globalData.userInfo._openid,
+      status: 1
     }).orderBy('created', 'acs').get()
     console.log(getOrders)
     const orders = getOrders.data.map((item) => {

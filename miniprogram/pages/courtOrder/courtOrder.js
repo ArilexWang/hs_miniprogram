@@ -140,8 +140,8 @@ Page({
       return
     }
     console.log("创建订单成功")
+    const newOrder = res.result
     try {
-      const newOrder = res.result
       const payByCash = await wx.cloud.callFunction({
         name: 'payByCash',
         data: {
@@ -185,10 +185,62 @@ Page({
       })
     }
     console.log("余额不足，调用微信支付")
-    // 调用微信支付
-    wx.showToast({
-      title: '余额不足',
-      icon: 'error'
+    await this.payByWechat(newOrder)
+  },
+  async payByWechat(order) {
+    console.log(order)
+    wx.showLoading({
+      title: '正在唤起微信支付',
+    })
+    const res = await wx.cloud.callFunction({
+      name: 'unifiedOrder',
+      data: {
+        orderid: order._id,
+        orderType: 0,
+      }
+    })
+    console.log(res)
+    if (res.result.errMsg !== 'success') {
+      wx.hideLoading({
+        success: (res) => {},
+      })
+      wx.showToast({
+        title: '支付失败，请联系客服',
+      })
+      return
+    }
+    wx.hideLoading({
+      success: (res) => {},
+    })
+    const payment = res.result.res.payment
+    wx.requestPayment({
+      ...payment,
+      success(res) {
+        console.log('支付成功', res)
+        wx.showModal({
+          title: '提示',
+          content: '支付成功',
+          showCancel: false,
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+              wx.redirectTo({
+                url: '../main/main',
+              })
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          }
+        })
+        
+      },
+      fail(err) {
+        console.log('支付失败', err)
+        wx.showToast({
+          title: '取消支付',
+          icon: 'error'
+        })
+      }
     })
   },
   async onConfirmClick() {

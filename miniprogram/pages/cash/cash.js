@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    shouldCost: 0
   },
 
   /**
@@ -32,16 +32,17 @@ Page({
     })
   },
   checkBoxChanged(e) {
-    console.log(e.detail)
     var useIntegral = false
+    var shouldCost = 0
     if (e.detail.value.length > 0) {
       useIntegral = true
+      shouldCost = this.data.selectedCash.value - this.data.userInfo.integral / 100 >= 0 ? (this.data.selectedCash.value - this.data.userInfo.integral / 100) : 0
     } else {
       useIntegral = false
     }
-    console.log(useIntegral)
     this.setData({
-      useIntegral: useIntegral
+      useIntegral: useIntegral,
+      shouldCost: shouldCost.toFixed(2)
     })
   },
   onItemClick(e) {
@@ -71,7 +72,7 @@ Page({
         useIntegral: this.data.useIntegral,
         price: this.data.selectedCash.value,
         extra: this.data.selectedCash.extra,
-        status: 1 // 测试直接设置为1
+        status: 0 // 测试直接设置为1
       }
     })
     console.log(newOrder)
@@ -82,22 +83,63 @@ Page({
       })
       return
     }
-    const updateRes = await db.collection('members').where({
-      _openid: this.data.userInfo._openid
-    }).update({
+    wx.hideLoading({
+      success: (res) => {},
+    })
+    await this.payByWechat(newOrder)
+  },
+
+  async payByWechat(order) {
+    console.log(order)
+    wx.showLoading({
+      title: '正在唤起微信支付',
+    })
+    const res = await wx.cloud.callFunction({
+      name: 'unifiedOrder',
       data: {
-        cash: db.command.inc(this.data.selectedCash.value + this.data.selectedCash.extra)
+        orderid: order._id,
+        orderType: 2,
       }
     })
-    console.log(updateRes)
-    if (updateRes.stats.updated === 1) {
+    console.log(res)
+    if (res.result.errMsg !== 'success') {
       wx.hideLoading({
         success: (res) => {},
       })
       wx.showToast({
-        title: '直接充值成功！',
+        title: '支付失败，请联系客服',
       })
+      return
     }
+    wx.hideLoading({
+      success: (res) => {},
+    })
+    const payment = res.result.res.payment
+    wx.requestPayment({
+      ...payment,
+      success(res) {
+        console.log('支付成功', res)
+        wx.showModal({
+          title: '提示',
+          content: '支付成功',
+          showCancel: false,
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+              wx.redirectTo({
+                url: '../main/main',
+              })
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          }
+        })
+        
+      },
+      fail(err) {
+        console.log('支付失败', err)
+      }
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

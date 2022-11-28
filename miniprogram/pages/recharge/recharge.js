@@ -6,7 +6,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    showDialog: false
+    showDialog: false,
+    shouldCost: 0,
   },
 
   /**
@@ -48,16 +49,19 @@ Page({
     })
   },
   checkBoxChanged(e) {
-    console.log(e.detail)
     var useIntegral = false
+    var shouldCost = 0
     if (e.detail.value.length > 0) {
       useIntegral = true
+      shouldCost = this.data.selectedRecharge.price - this.data.userInfo.integral / 100 >= 0 ? (this.data.selectedRecharge.price - this.data.userInfo.integral / 100) : 0
     } else {
       useIntegral = false
     }
     console.log(useIntegral)
+
     this.setData({
-      useIntegral: useIntegral
+      useIntegral: useIntegral,
+      shouldCost: shouldCost.toFixed(2)
     })
   },
   async onConfirm() {
@@ -105,8 +109,20 @@ Page({
         wx.hideLoading({
           success: (res) => {},
         })
-        wx.showToast({
-          title: '购买成功',
+        wx.showModal({
+          title: '提示',
+          content: '支付成功',
+          showCancel: false,
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+              wx.redirectTo({
+                url: '../main/main',
+              })
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          }
         })
       }
     } else {
@@ -120,6 +136,9 @@ Page({
   },
   async payByWechat(order) {
     console.log(order)
+    wx.showLoading({
+      title: '正在唤起微信支付',
+    })
     const res = await wx.cloud.callFunction({
       name: 'unifiedOrder',
       data: {
@@ -128,19 +147,40 @@ Page({
       }
     })
     console.log(res)
+    wx.hideLoading({
+      success: (res) => {},
+    })
     if (res.result.errMsg !== 'success') {
       wx.showToast({
         title: '支付失败，请联系客服',
       })
     }
+    
     const payment = res.result.res.payment
     wx.requestPayment({
       ...payment,
-      success (res) {
+      success(res) {
         console.log('支付成功', res)
+        wx.showModal({
+          title: '提示',
+          content: '支付成功',
+          showCancel: false,
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+              wx.redirectTo({
+                url: '../main/main',
+              })
+            }
+          }
+        }) 
       },
       fail(err) {
-        console.log('支付失败',err)
+        wx.showToast({
+          title: '取消支付',
+          icon: 'error'
+        })
+        console.log('支付失败', err)
       }
     })
   },

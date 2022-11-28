@@ -40,6 +40,30 @@ exports.main = async (event, context) => {
     const updateMember = await memberTransaction.doc(member._id).update({
       data: {
         validTimes: member.validTimes - order.value,
+        cash: member.cash + order.actualPrice
+      }
+    })
+    if(updateMember.stats.updated !== 1) {
+      return { errorMsg: '更新用户余额失败' }
+    }
+    await transaction.commit()
+    return { errorMsg: 'success' }
+  } else if(order.payBy === 1 && order.status === 1 && event.handleBy === 'backend') {
+    // 微信支付，后台操作退款
+    const updateOrder = await orderTransaction.doc(order._id).update({
+      data: {
+        status: 2,
+      }
+    })
+    if(updateOrder.stats.updated !== 1) {
+      return { errorMsg: '更新订单状态失败' }
+    }
+    if (member.validTimes < order.value) {
+      return { errorMsg: '用户剩余次卡不足，无法完成退款' }
+    }
+    const updateMember = await memberTransaction.doc(member._id).update({
+      data: {
+        validTimes: member.validTimes - order.value,
       }
     })
     if(updateMember.stats.updated !== 1) {

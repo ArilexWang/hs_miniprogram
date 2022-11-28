@@ -53,8 +53,8 @@
     </view>
     <view class="flex-row flex-content-arround">
       <view style="margin: 5px">原价: ￥{{selectedRecharge.price}}.00</view>
-      <view wx:if="{{useIntegral}}" style="margin: 5px">预计还需支付 ￥{{selectedRecharge.price - userInfo.integral / 100 >= 0 ? selectedRecharge.price - userInfo.integral / 100 : 0 }}.00</view>
-      <view wx:else style="margin: 5px">预计还需支付 ￥{{selectedRecharge.price}}.00</view>
+      <view wx:if="{{useIntegral}}" style="margin: 5px">预计还需支付 ￥{{shouldCost}}</view>
+      <view wx:else style="margin: 5px">预计还需支付 ￥{{selectedRecharge.price}}</view>
     </view>  
   </view>
 
