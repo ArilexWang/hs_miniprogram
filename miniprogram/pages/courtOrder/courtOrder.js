@@ -57,9 +57,15 @@ Page({
         selectedCourts,
         _openid
       }
+      wx.showLoading({
+        title: '正在计算价格',
+      })
       const res = await wx.cloud.callFunction({
         name: 'calculateOrderPrice',
         data: params
+      })
+      wx.hideLoading({
+        success: (res) => {},
       })
       period.price = res.result.price
       period.actualPrice = res.result.price
