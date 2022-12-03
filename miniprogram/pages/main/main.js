@@ -24,7 +24,7 @@ Page({
       userInfo: app.globalData.userInfo
     })
   },
-  onRechargeClick() {
+  async onRechargeClick() {
     wx.navigateTo({
       url: '../recharge/recharge',
     })
@@ -40,10 +40,7 @@ Page({
     })
   },
   qrCodeClick() {
-    const code = {
-      type: 0,
-      id: app.globalData.userInfo._id
-    }
+    const code = "0_" + app.globalData.userInfo._openid
     drawQrcode({
       width: 230,
       height: 230,
@@ -59,6 +56,11 @@ Page({
   onHideMask() {
     this.setData({
       showQRCode: false
+    })
+  },
+  onPhoneClick() {
+    wx.makePhoneCall({
+      phoneNumber: '13352661322'
     })
   },
   /**

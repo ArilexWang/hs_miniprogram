@@ -70,7 +70,7 @@ exports.main = async (event, context) => {
   console.log(member.cash, actualPrice)
   const updateMember = await memberTransaction.doc(member._id).update({
     data: {
-      cash: member.cash - actualPrice,
+      cash: (member.cash - actualPrice).toFixed(2),
       integral: member.integral - costIntegral
     }
   })

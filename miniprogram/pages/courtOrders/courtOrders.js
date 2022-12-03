@@ -160,10 +160,7 @@ Page({
   qrCodeClick(e) {
     console.log(this.data.courtOrders[e.currentTarget.id])
     const order = this.data.courtOrders[e.currentTarget.id]
-    const code = {
-      type: 1,
-      id: order._id
-    }
+    const code = "1_" + order._id
     drawQrcode({
       width: 230,
       height: 230,

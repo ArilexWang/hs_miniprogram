@@ -62,12 +62,14 @@ exports.main = async (event, context) => {
     })
     console.log('退款结果', res)
     if (res.returnCode === 'SUCCESS' && res.returnMsg === 'OK') { // 退款成功
+      console.log('扣除积分，剩余积分：', member.integral - order.actualPrice)
       const updateMember = await memberTransaction.doc(member._id).update({
         data: {
           integral: member.integral - order.actualPrice,
         }
       })
-      if (updateMember.stats.updated !== 1) {
+      if (updateMember.stats.updated !== 1 && updateMember.stats.updated !== 0) {
+        console.log(updateMember)
         return {
           errorMsg: '更新用户余额失败'
         }
