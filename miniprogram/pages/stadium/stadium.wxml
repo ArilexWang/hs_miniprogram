@@ -2,7 +2,7 @@
   <view>
     <swiper style="height:230px;width:100vw" indicator-dots="{{true}}" autoplay="{{false}}" circular="{{true}}">
       <swiper-item wx:for="{{banners}}" wx:key="*this">
-        <image style="width:100vw" mode="widthFix" src="{{item}}"></image>
+        <image style="width:100vw" mode="aspectFill" src="{{item}}"></image>
       </swiper-item>
     </swiper>
   </view>

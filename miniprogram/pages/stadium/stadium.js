@@ -10,7 +10,7 @@ Page({
   data: {
     options: [],
     selectedIndex: 0,
-    banners: ['cloud://test-7ggypkpn0dd471ba.7465-test-7ggypkpn0dd471ba-1314769302/banners/WechatIMG254.jpeg','cloud://test-7ggypkpn0dd471ba.7465-test-7ggypkpn0dd471ba-1314769302/banners/WechatIMG253.jpeg', 'cloud://test-7ggypkpn0dd471ba.7465-test-7ggypkpn0dd471ba-1314769302/banners/WechatIMG249.jpeg'],
+    banners: ['cloud://test-7ggypkpn0dd471ba.7465-test-7ggypkpn0dd471ba-1314769302/banners/Banner1.jpeg','cloud://test-7ggypkpn0dd471ba.7465-test-7ggypkpn0dd471ba-1314769302/banners/Banner2.jpeg', 'cloud://test-7ggypkpn0dd471ba.7465-test-7ggypkpn0dd471ba-1314769302/banners/Banner3.jpeg', 'cloud://test-7ggypkpn0dd471ba.7465-test-7ggypkpn0dd471ba-1314769302/banners/Banner4.jpeg', 'cloud://test-7ggypkpn0dd471ba.7465-test-7ggypkpn0dd471ba-1314769302/banners/Banner5.jpeg'],
   },
 
   /**
